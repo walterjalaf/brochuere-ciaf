@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte de No Conciliado</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: #f3f5f9;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  header {
+    background: #1a2236;
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    border-bottom: 2px solid #E07A3C;
+  }
+  header .left { display: flex; align-items: center; gap: 14px; }
+  header .badge {
+    background: #E07A3C;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  header h1 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  header .meta {
+    font-size: 11px;
+    opacity: 0.55;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .img-wrap {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 28px 24px;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.14);
+    background: white;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="left">
+      <span class="badge">Diario</span>
+      <h1>Reporte de No Conciliado</h1>
+    </div>
+    <div class="meta">Movimientos pendientes · Día</div>
+  </header>
+  <div class="img-wrap">
+    <img src="no_conciliado.png" alt="Reporte de no conciliado — movimientos pendientes" />
+  </div>
+</body>
+</html>

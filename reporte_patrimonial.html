@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard Económico · Estado de Situación Patrimonial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-page: #f4f5f7;
+    --bg-card: #ffffff;
+    --border: #e6e8ec;
+    --border-strong: #d6d9de;
+    --text-primary: #0f172a;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9aa0a6;
+    --row-header-bg: #f3f4f6;
+    --pill-active: #2151b3;
+    --pill-active-text: #ffffff;
+    --pill-loss-bg: #fde8e8;
+    --pill-loss-text: #c0392b;
+    --positive: #16a34a;
+    --negative: #dc2626;
+    --neutral: #0f172a;
+    --accent-blue: #1d4ed8;
+    --accent-blue-soft: #eef3ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "tnum" on, "lnum" on;
+  }
+
+  body {
+    min-height: 100vh;
+    padding: 32px 24px 64px;
+  }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  /* === TOP BAR === */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .brand-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    font-weight: 600;
+  }
+
+  .brand-title {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .brand-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent-blue);
+    margin-left: 4px;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #fff;
+    padding: 6px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+
+  .nav-pill {
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: none;
+    background: transparent;
+  }
+
+  .nav-pill:hover { color: var(--text-primary); }
+
+  .nav-pill.active {
+    background: var(--pill-active);
+    color: var(--pill-active-text);
+  }
+
+  .nav-pill.loss {
+    background: var(--pill-loss-bg);
+    color: var(--pill-loss-text);
+    font-weight: 600;
+    cursor: default;
+  }
+
+  .nav-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+    margin: 0 4px;
+  }
+
+  .btn-secondary {
+    padding: 9px 16px;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+  }
+
+  .btn-secondary:hover {
+    background: #f9fafb;
+    border-color: var(--border-strong);
+  }
+
+  /* === PAGE TITLE === */
+  .page-title {
+    text-align: center;
+    margin: 12px 0 32px;
+  }
+
+  .page-title h1 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .page-title p {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .page-title strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* === CARDS === */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .card-title {
+    padding: 22px 28px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* === TABLE === */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-feature-settings: "tnum" on, "lnum" on;
+  }
+
+  thead th {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding: 14px 28px;
+    text-align: right;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+
+  thead th:first-child { text-align: left; }
+
+  tbody td {
+    padding: 14px 28px;
+    font-size: 14px;
+    color: var(--text-primary);
+    border-bottom: 1px solid #f1f2f5;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  tbody td:first-child {
+    text-align: left;
+    color: var(--text-primary);
+    font-weight: 400;
+  }
+
+  /* Subsection (group) header rows */
+  tr.group-row td {
+    background: var(--row-header-bg);
+    padding: 9px 28px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Total row */
+  tr.total-row td {
+    font-weight: 700;
+    border-top: 1px solid var(--border-strong);
+    border-bottom: none;
+    padding-top: 18px;
+    padding-bottom: 20px;
+  }
+
+  .pos { color: var(--positive); font-weight: 500; }
+  .neg { color: var(--negative); font-weight: 500; }
+  .neu { color: var(--text-secondary); font-weight: 500; }
+
+  /* === SUMMARY CARD === */
+  .summary {
+    background: var(--accent-blue-soft);
+    border: 1px solid #c7d6f5;
+    border-radius: 12px;
+    padding: 26px 32px;
+    margin-top: 8px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+  }
+
+  .summary-row .label {
+    color: var(--accent-blue);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .summary-row .label small {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-blue);
+  }
+
+  .summary-row .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent-blue);
+  }
+
+  .summary-row.value-neg .value { color: var(--negative); }
+
+  .summary-divider {
+    height: 1px;
+    background: #c7d6f5;
+    margin: 14px 0 4px;
+  }
+
+  .summary-row.highlight {
+    padding-top: 14px;
+  }
+
+  .summary-row.highlight .label,
+  .summary-row.highlight .value {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 720px) {
+    body { padding: 20px 14px 48px; }
+    .topbar { flex-direction: column; align-items: stretch; }
+    .nav { overflow-x: auto; justify-content: flex-start; }
+    .card-title { padding: 18px 18px 14px; font-size: 14px; }
+    thead th, tbody td { padding: 12px 16px; font-size: 13px; }
+    tr.group-row td { padding: 8px 16px; }
+    .brand-title { font-size: 24px; }
+    .summary { padding: 22px 20px; }
+    .summary-row { flex-wrap: wrap; gap: 4px; }
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .topbar { display: none; }
+    .card { box-shadow: none; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-eyebrow">Reporte mensual · Período actual</span>
+        <span class="brand-title">Dashboard<em>Económico</em></span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <nav class="nav" aria-label="Secciones">
+          <button class="nav-pill" type="button">Fábrica</button>
+          <button class="nav-pill" type="button">Panadería</button>
+          <button class="nav-pill" type="button">Financiero</button>
+          <button class="nav-pill active" type="button">Balance</button>
+          <span class="nav-divider"></span>
+          <span class="nav-pill loss">↓ Pérdida 2%</span>
+        </nav>
+        <button class="btn-secondary" type="button">
+          <span style="font-size:14px;">⟳</span> Importar datos
+        </button>
+      </div>
+    </header>
+
+    <!-- PAGE TITLE -->
+    <div class="page-title">
+      <h1>Estado de Situación Patrimonial</h1>
+      <p>Comparativo: <strong>Febrero 2025</strong> vs <strong>Marzo 2025</strong></p>
+    </div>
+
+    <!-- ACTIVO -->
+    <section class="card" aria-labelledby="activo-title">
+      <h2 class="card-title" id="activo-title">Activo</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Febrero 2025</th>
+            <th>Marzo 2025</th>
+            <th>Variación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-row"><td colspan="4">Disponibilidades</td></tr>
+          <tr>
+            <td>Efectivo</td>
+            <td>$ 2.174.229</td>
+            <td>$ 13.644.429</td>
+            <td class="pos">+$ 11.470.200</td>
+          </tr>
+          <tr>
+            <td>BBVA Francés</td>
+            <td>$ 644.310</td>
+            <td>$ 398.989</td>
+            <td class="neg">-$ 245.321</td>
+          </tr>
+          <tr>
+            <td>ICBC</td>
+            <td>-$ 444.450</td>
+            <td>$ 754.269</td>
+            <td class="pos">+$ 1.198.719</td>
+          </tr>
+
+          <tr class="group-row"><td colspan="4">Créditos</td></tr>
+          <tr>
+            <td>Deudores por Venta</td>
+            <td>$ 74.183.184</td>
+            <td>$ 68.246.374</td>
+            <td class="neg">-$ 5.936.810</td>
+          </tr>
+
+          <tr class="total-row">
+            <td>Total Activo</td>
+            <td>$ 76.557.273</td>
+            <td>$ 83.044.062</td>
+            <td class="pos">+$ 6.486.789</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- PASIVO -->
+    <section class="card" aria-labelledby="pasivo-title">
+      <h2 class="card-title" id="pasivo-title">Pasivo</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Febrero 2025</th>
+            <th>Marzo 2025</th>
+            <th>Variación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-row"><td colspan="4">Deudas Comerciales</td></tr>
+          <tr>
+            <td>Proveedores</td>
+            <td>$ 120.777.980</td>
+            <td>$ 135.146.743</td>
+            <td class="neg">+$ 14.368.763</td>
+          </tr>
+          <tr>
+            <td>Cheques a Pagar</td>
+            <td>$ 180.009.360</td>
+            <td>$ 149.410.465</td>
+            <td class="pos">-$ 30.598.895</td>
+          </tr>
+
+          <tr class="group-row"><td colspan="4">Deudas Fiscales</td></tr>
+          <tr>
+            <td>Deudas ARCA</td>
+            <td>$ 99.161.333</td>
+            <td>$ 116.364.827</td>
+            <td class="neg">+$ 17.203.494</td>
+          </tr>
+          <tr>
+            <td>Deudas Rentas</td>
+            <td>$ 24.244.053</td>
+            <td>$ 24.271.984</td>
+            <td class="neg">+$ 27.931</td>
+          </tr>
+          <tr>
+            <td>Deuda Previsional</td>
+            <td>$ 72.978.500</td>
+            <td>$ 76.955.428</td>
+            <td class="neg">+$ 3.976.928</td>
+          </tr>
+
+          <tr class="group-row"><td colspan="4">Otras Deudas</td></tr>
+          <tr>
+            <td>Préstamos a Pagar</td>
+            <td>$ 2.958.797</td>
+            <td>$ 2.958.797</td>
+            <td class="neu">$ 0</td>
+          </tr>
+          <tr>
+            <td>Honorarios CIAF</td>
+            <td>$ 6.389.000</td>
+            <td>$ 8.000.000</td>
+            <td class="neg">+$ 1.611.000</td>
+          </tr>
+          <tr>
+            <td>Honorarios Redes</td>
+            <td>$ 800.000</td>
+            <td>$ 1.600.000</td>
+            <td class="neg">+$ 800.000</td>
+          </tr>
+          <tr>
+            <td>Honorarios Contable</td>
+            <td>$ 4.718.405</td>
+            <td>$ 5.918.405</td>
+            <td class="neg">+$ 1.200.000</td>
+          </tr>
+
+          <tr class="total-row">
+            <td>Total Pasivo</td>
+            <td>$ 512.037.427</td>
+            <td>$ 520.626.649</td>
+            <td class="neg">+$ 8.589.222</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="summary" aria-label="Resumen patrimonial">
+      <div class="summary-row">
+        <div class="label">Activo<br><small>Total</small></div>
+        <div class="value">$ 83.044.062</div>
+      </div>
+      <div class="summary-row">
+        <div class="label">Pasivo<br><small>Total</small></div>
+        <div class="value">$ 520.626.649</div>
+      </div>
+      <div class="summary-row value-neg">
+        <div class="label">Patrimonio Neto (Marzo 2025)</div>
+        <div class="value">-$ 437.582.587</div>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-row highlight value-neg">
+        <div class="label">Variación del Patrimonio (Feb → Mar)</div>
+        <div class="value">-$ 2.102.433</div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

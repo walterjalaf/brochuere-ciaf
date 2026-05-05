@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard Económico — Reporte Mensual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:            #f3f5f9;
+    --card:          #ffffff;
+    --border:        #e6eaf2;
+    --border-soft:   #eef1f6;
+    --ink:           #0f172a;
+    --ink-soft:      #1e293b;
+    --muted:         #64748b;
+    --muted-2:       #94a3b8;
+    --label:         #6b7c93;
+
+    --blue:          #2563eb;
+    --blue-deep:     #1d4ed8;
+    --blue-soft:     #dbeafe;
+
+    --teal:          #14b8a6;
+    --teal-soft:     #ccfbf1;
+
+    --orange:        #f97316;
+    --orange-soft:   #ffedd5;
+
+    --purple:        #a855f7;
+    --purple-soft:   #f3e8ff;
+
+    --red:           #ef4444;
+    --red-soft:      #fee2e2;
+    --red-tint:      #fff1f2;
+
+    --shadow:        0 1px 2px rgba(15,23,42,.04), 0 1px 3px rgba(15,23,42,.04);
+    --shadow-card:   0 1px 2px rgba(15,23,42,.04), 0 4px 14px -8px rgba(15,23,42,.10);
+
+    --radius:        14px;
+    --radius-sm:     10px;
+    --radius-pill:   999px;
+
+    --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-disp: "Cormorant Garamond", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01","cv11","tnum";
+  }
+
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px 56px;
+  }
+
+  /* ---------- HEADER ---------- */
+  .header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .title-block .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .title-block h1 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 34px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .title-block h1 em {
+    font-family: var(--font-disp);
+    font-style: italic;
+    font-weight: 600;
+    color: var(--blue);
+    letter-spacing: -.005em;
+    margin-left: 6px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tabs {
+    display: inline-flex;
+    background: #fff;
+    padding: 5px;
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .tab {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: color .15s;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.is-active {
+    background: var(--blue);
+    color: #fff;
+    box-shadow: 0 4px 12px -4px rgba(37,99,235,.5);
+  }
+
+  .badge-loss {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--red-soft);
+    color: #b91c1c;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--radius-pill);
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+
+  /* ---------- GRID ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  .col-4  { grid-column: span 4; }
+  .col-6  { grid-column: span 6; }
+  .col-8  { grid-column: span 8; }
+  .col-12 { grid-column: span 12; }
+
+  /* ---------- CARD ---------- */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .sub {
+    font-weight: 500;
+    color: var(--muted-2);
+    letter-spacing: .06em;
+    font-size: 10px;
+  }
+
+  /* ---------- KPI ---------- */
+  .kpi {
+    border-left: 4px solid var(--accent, var(--blue));
+    padding-left: 18px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .kpi .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 8px;
+  }
+  .kpi .value {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -.015em;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .kpi .value.neg { color: var(--red); }
+  .kpi .meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .kpi-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--accent-soft, var(--blue-soft));
+    color: var(--accent, var(--blue));
+    display: grid; place-items: center;
+    flex: none;
+  }
+  .kpi-icon svg { width: 16px; height: 16px; }
+
+  .kpi.teal   { --accent: var(--teal);   --accent-soft: var(--teal-soft); }
+  .kpi.orange { --accent: var(--orange); --accent-soft: var(--orange-soft); }
+  .kpi.blue   { --accent: var(--blue);   --accent-soft: var(--blue-soft); }
+
+  /* ---------- ROW LIST (clientes / egresos) ---------- */
+  .row-list { display: flex; flex-direction: column; }
+  .row-list .header-row,
+  .row-list .row {
+    display: grid;
+    grid-template-columns: 1.6fr 1.5fr 1fr;
+    align-items: center;
+    padding: 9px 0;
+    border-top: 1px solid var(--border-soft);
+    font-size: 13px;
+  }
+  .row-list .header-row {
+    border-top: 0;
+    border-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+  }
+  .row-list .row:first-of-type { border-top: 1px solid var(--border-soft); }
+  .row-list .row .name { color: var(--ink-soft); }
+  .row-list .row .amount {
+    text-align: right;
+    font-weight: 700;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .row-list .row .right { text-align: right; }
+
+  /* progress bar */
+  .pbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .pbar .track {
+    flex: 1;
+    height: 5px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .pbar .fill {
+    display: block;
+    height: 100%;
+    background: var(--blue);
+    border-radius: 999px;
+  }
+  .pbar.teal   .fill { background: var(--teal);   }
+  .pbar.orange .fill { background: var(--orange); }
+  .pbar.purple .fill { background: var(--purple); }
+  .pbar.red    .fill { background: var(--red);    }
+
+  /* tiny indicator bar (centro/derecha) */
+  .tinybar {
+    height: 4px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 110px;
+  }
+  .tinybar .fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 999px;
+  }
+
+  /* ---------- EGRESOS POR CLASE ---------- */
+  .class-row {
+    display: grid;
+    grid-template-columns: 1.4fr .6fr 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 0;
+    border-top: 1px solid var(--border-soft);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .class-row:first-of-type { border-top: 0; }
+  .class-row .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .class-row .pct { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .class-row .amt {
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .class-row .chev {
+    color: var(--muted-2);
+    font-size: 14px;
+  }
+
+  .total-pill {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 700;
+  }
+  .total-pill .v {
+    font-size: 16px;
+    color: var(--orange);
+    font-weight: 800;
+    text-transform: none;
+    letter-spacing: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- DESGLOSE COMPARATIVO ---------- */
+  .desglose-row { padding: 10px 0; }
+  .desglose-row .top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: var(--ink-soft);
+  }
+  .desglose-row .top .v {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .desglose-row .bar {
+    height: 6px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .desglose-row .bar .fill { height: 100%; border-radius: 999px; }
+  .desglose-row .meta {
+    margin-top: 5px;
+    font-size: 11px;
+    color: var(--muted-2);
+  }
+
+  /* resultado neto box */
+  .neto-box {
+    margin-top: 18px;
+    background: var(--red-tint);
+    border: 1px solid #fecdd3;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .neto-box .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #b91c1c;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .neto-box .value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--red);
+    font-variant-numeric: tabular-nums;
+  }
+  .neto-box .right {
+    color: #b91c1c;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* clase breakdown bottom area */
+  .class-block { padding-top: 6px; padding-bottom: 6px; }
+
+  /* sub label inside cards (e.g. CLICK PARA DETALLE) */
+  .sub-hint {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--muted-2);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-left: 4px;
+  }
+
+  /* SALDOS POR CUENTA */
+  .saldo-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px solid var(--border-soft);
+    font-size: 13px;
+  }
+  .saldo-row:first-of-type { border-top: 0; padding-top: 4px; }
+  .saldo-row .name { color: var(--ink-soft); }
+  .saldo-row .amt {
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .saldo-row .amt.neg { color: var(--red); }
+
+  /* Total egresos card */
+  .te-total {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .te-total .l {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--label);
+    line-height: 1.3;
+  }
+  .te-total .v {
+    color: var(--orange);
+    font-weight: 800;
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Two-line egresos rows (centro/derecha cards) — name + tinybar + amount */
+  .erow {
+    display: grid;
+    grid-template-columns: 1.3fr 1.3fr 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 8.5px 0;
+    border-top: 1px solid var(--border-soft);
+    font-size: 13px;
+  }
+  .erow:first-of-type { border-top: 0; }
+  .erow .name  { color: var(--ink-soft); }
+  .erow .amt   {
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    font-size: 12.5px;
+  }
+  .erow.total {
+    border-top: 1px solid var(--border);
+    margin-top: 6px;
+    padding-top: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: 11px;
+    color: var(--label);
+  }
+  .erow.total .amt {
+    color: var(--orange);
+    font-size: 15px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* purple tinybar for ICBC card if needed */
+  .tinybar.purple .fill { background: var(--purple); }
+  .tinybar.teal   .fill { background: var(--teal); }
+  .tinybar.blue   .fill { background: var(--blue); }
+
+  /* responsive */
+  @media (max-width: 980px) {
+    .col-4, .col-6, .col-8 { grid-column: span 12; }
+    .title-block h1 { font-size: 28px; }
+  }
+
+  /* footer note */
+  .foot {
+    margin-top: 22px;
+    text-align: center;
+    color: var(--muted-2);
+    font-size: 11px;
+    letter-spacing: .08em;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="title-block">
+      <div class="eyebrow">Reporte Mensual · Período Actual</div>
+      <h1>Dashboard <em>Económico</em></h1>
+    </div>
+    <div class="header-actions">
+      <div class="tabs" role="tablist">
+        <div class="tab">Fábrica</div>
+        <div class="tab">Panadería</div>
+        <div class="tab is-active">Financiero</div>
+        <div class="tab">Balance</div>
+      </div>
+      <span class="badge-loss">↓ Pérdida 1%</span>
+      <button class="btn">↻ Importar datos</button>
+    </div>
+  </header>
+
+  <!-- KPI ROW -->
+  <section class="grid" style="margin-bottom:16px">
+    <div class="col-4">
+      <div class="card">
+        <div class="kpi teal">
+          <div>
+            <div class="label">Total Ingresos</div>
+            <div class="value">$ 142.174.376,37</div>
+            <div class="meta">Ventas totales del período</div>
+          </div>
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card">
+        <div class="kpi orange">
+          <div>
+            <div class="label">Total Egresos</div>
+            <div class="value">$ 143.525.238,05</div>
+            <div class="meta">Egresos totales del período</div>
+          </div>
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7 7 7-7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card">
+        <div class="kpi blue">
+          <div>
+            <div class="label">Resultado Económico</div>
+            <div class="value neg">$ 1.350.861,68</div>
+            <div class="meta">Pérdida neta del período</div>
+          </div>
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VENTAS POR CLIENTE / SALDOS POR CUENTA -->
+  <section class="grid" style="margin-bottom:16px">
+    <div class="col-8">
+      <div class="card">
+        <div class="card-title">Ventas por cliente</div>
+        <div class="row-list">
+          <div class="header-row">
+            <div>Cliente</div><div>Participación</div><div class="right">Monto</div>
+          </div>
+          <!-- rows -->
+          <div class="row"><div class="name">Central - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:95%"></span></span><span>28.6%</span></div>
+            <div class="amount">$ 48.871.196,00</div></div>
+          <div class="row"><div class="name">25 de Mayo y Urquiza</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:38%"></span></span><span>11.0%</span></div>
+            <div class="amount">$ 18.810.200,00</div></div>
+          <div class="row"><div class="name">Caucete - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:28%"></span></span><span>8.2%</span></div>
+            <div class="amount">$ 14.019.000,00</div></div>
+          <div class="row"><div class="name">Rawson - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:26%"></span></span><span>7.6%</span></div>
+            <div class="amount">$ 13.007.400,00</div></div>
+          <div class="row"><div class="name">Desamparados - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:22%"></span></span><span>6.6%</span></div>
+            <div class="amount">$ 11.248.719,00</div></div>
+          <div class="row"><div class="name">Cremas del Centro S.R.L</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:21%"></span></span><span>6.3%</span></div>
+            <div class="amount">$ 10.748.347,05</div></div>
+          <div class="row"><div class="name">Ortiz (Yrigoyen)</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:18%"></span></span><span>5.5%</span></div>
+            <div class="amount">$ 9.434.678,00</div></div>
+          <div class="row"><div class="name">Libertador S.R.L</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:15%"></span></span><span>4.6%</span></div>
+            <div class="amount">$ 7.881.321,26</div></div>
+          <div class="row"><div class="name">Santa Lucía - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:14%"></span></span><span>4.3%</span></div>
+            <div class="amount">$ 7.347.800,00</div></div>
+          <div class="row"><div class="name">Coll - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:13%"></span></span><span>4.0%</span></div>
+            <div class="amount">$ 6.861.110,36</div></div>
+          <div class="row"><div class="name">San Ignacio - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:9%"></span></span><span>2.8%</span></div>
+            <div class="amount">$ 4.849.898,00</div></div>
+          <div class="row"><div class="name">Valdivia - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:8%"></span></span><span>2.5%</span></div>
+            <div class="amount">$ 4.250.000,00</div></div>
+          <div class="row"><div class="name">Chimbas Centenario</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:7%"></span></span><span>2.3%</span></div>
+            <div class="amount">$ 3.900.000,00</div></div>
+          <div class="row"><div class="name">España e Ig De La Roza</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:6%"></span></span><span>2.0%</span></div>
+            <div class="amount">$ 3.500.000,00</div></div>
+          <div class="row"><div class="name">Albardón - Franquicia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:6%"></span></span><span>1.8%</span></div>
+            <div class="amount">$ 3.100.000,00</div></div>
+          <div class="row"><div class="name">Venecia</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:3%"></span></span><span>0.9%</span></div>
+            <div class="amount">$ 1.500.000,00</div></div>
+          <div class="row"><div class="name">Puerto Aventura</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:2.5%"></span></span><span>0.8%</span></div>
+            <div class="amount">$ 1.300.000,00</div></div>
+          <div class="row"><div class="name">Hotel Viñas del Sol</div>
+            <div class="pbar"><span class="track"><span class="fill" style="width:0.7%"></span></span><span>0.2%</span></div>
+            <div class="amount">$ 337.000,00</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="card" style="height:100%">
+        <div class="card-title">Saldos por cuenta</div>
+        <div class="saldo-row">
+          <div class="name">Efectivo</div>
+          <div class="pbar"><span class="track"><span class="fill" style="width:96%"></span></span></div>
+          <div class="amt">$ 2.174.229,00</div>
+        </div>
+        <div class="saldo-row">
+          <div class="name">ICBC</div>
+          <div class="pbar"><span class="track"><span class="fill" style="width:30%"></span></span></div>
+          <div class="amt">$ 644.310,00</div>
+        </div>
+        <div class="saldo-row">
+          <div class="name">BBVA Francés</div>
+          <div class="pbar red"><span class="track"><span class="fill" style="width:21%"></span></span></div>
+          <div class="amt neg">$ -444.450,00</div>
+        </div>
+        <div class="saldo-row">
+          <div class="name">Mercado Pago</div>
+          <div class="pbar"><span class="track"></span></div>
+          <div class="amt">$ 0,00</div>
+        </div>
+        <div class="saldo-row">
+          <div class="name">San Juan</div>
+          <div class="pbar"><span class="track"><span class="fill" style="width:22%"></span></span></div>
+          <div class="amt">$ 477.835,00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EGRESOS POR CLASE / EGRESOS DE EFECTIVO / GASTOS GENERALES BBVA -->
+  <section class="grid" style="margin-bottom:16px">
+
+    <!-- EGRESOS POR CLASE -->
+    <div class="col-4">
+      <div class="card" style="height:100%">
+        <div class="card-title">
+          Egresos por Clase
+          <span class="sub-hint">· Click para Detalle</span>
+        </div>
+        <div class="class-block">
+          <div class="class-row">
+            <div><span class="dot" style="background:var(--teal)"></span>Egresos Efectivo</div>
+            <div class="pct">43.3%</div>
+            <div class="amt" style="color:var(--teal)">$ 47.912.818,79</div>
+            <div class="chev">›</div>
+          </div>
+          <div class="class-row">
+            <div><span class="dot" style="background:var(--orange)"></span>Egresos BBVA</div>
+            <div class="pct">26.5%</div>
+            <div class="amt" style="color:var(--orange)">$ 29.274.627,59</div>
+            <div class="chev">›</div>
+          </div>
+          <div class="class-row">
+            <div><span class="dot" style="background:var(--purple)"></span>Egresos ICBC</div>
+            <div class="pct">30.2%</div>
+            <div class="amt" style="color:var(--purple)">$ 33.365.387,16</div>
+            <div class="chev">›</div>
+          </div>
+        </div>
+        <div class="te-total">
+          <div class="l">Total<br/>Egresos</div>
+          <div class="v">$ 143.525.238,05</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EGRESOS DE EFECTIVO -->
+    <div class="col-4">
+      <div class="card">
+        <div class="card-title">Egresos de Efectivo</div>
+        <div class="erow"><div class="name">Depósito</div>           <div><div class="tinybar"><div class="fill" style="width:100%"></div></div></div><div class="amt">$ 14.899.000,00</div></div>
+        <div class="erow"><div class="name">Proveedor</div>          <div><div class="tinybar"><div class="fill" style="width:64%"></div></div></div><div class="amt">$ 9.620.000,00</div></div>
+        <div class="erow"><div class="name">Energía</div>            <div><div class="tinybar"><div class="fill" style="width:50%"></div></div></div><div class="amt">$ 7.567.618,79</div></div>
+        <div class="erow"><div class="name">Sueldo</div>             <div><div class="tinybar"><div class="fill" style="width:42%"></div></div></div><div class="amt">$ 6.335.200,00</div></div>
+        <div class="erow"><div class="name">Honorario CIAF</div>     <div><div class="tinybar"><div class="fill" style="width:26%"></div></div></div><div class="amt">$ 3.900.000,00</div></div>
+        <div class="erow"><div class="name">Reparación</div>         <div><div class="tinybar"><div class="fill" style="width:16%"></div></div></div><div class="amt">$ 2.440.000,00</div></div>
+        <div class="erow"><div class="name">Retiro Berto</div>       <div><div class="tinybar"><div class="fill" style="width:8%"></div></div></div><div class="amt">$ 1.233.000,00</div></div>
+        <div class="erow"><div class="name">Préstamo</div>           <div><div class="tinybar"><div class="fill" style="width:4%"></div></div></div><div class="amt">$ 542.000,00</div></div>
+        <div class="erow"><div class="name">Sub Secretaría</div>     <div><div class="tinybar"><div class="fill" style="width:2%"></div></div></div><div class="amt">$ 300.000,00</div></div>
+        <div class="erow"><div class="name">Mantenimiento</div>      <div><div class="tinybar"><div class="fill" style="width:2%"></div></div></div><div class="amt">$ 300.000,00</div></div>
+        <div class="erow"><div class="name">Cambio efectivo</div>    <div><div class="tinybar"><div class="fill" style="width:2%"></div></div></div><div class="amt">$ 290.000,00</div></div>
+        <div class="erow"><div class="name">Gasto</div>              <div><div class="tinybar"><div class="fill" style="width:2%"></div></div></div><div class="amt">$ 253.000,00</div></div>
+        <div class="erow"><div class="name">Ferretería</div>         <div><div class="tinybar"><div class="fill" style="width:1%"></div></div></div><div class="amt">$ 168.000,00</div></div>
+        <div class="erow"><div class="name">Nicolas Bunda</div>      <div><div class="tinybar"><div class="fill" style="width:0.5%"></div></div></div><div class="amt">$ 50.000,00</div></div>
+        <div class="erow"><div class="name">Varios</div>             <div><div class="tinybar"><div class="fill" style="width:0.2%"></div></div></div><div class="amt">$ 15.000,00</div></div>
+        <div class="erow total"><div>Total</div><div></div><div class="amt">$ 47.912.818,79</div></div>
+      </div>
+    </div>
+
+    <!-- GASTOS GENERALES BBVA -->
+    <div class="col-4">
+      <div class="card">
+        <div class="card-title">Gastos Generales — BBVA</div>
+        <div class="erow"><div class="name">Transf. entre cuentas</div> <div></div><div class="amt">$ 11.729.447,35</div></div>
+        <div class="erow"><div class="name">Proveedor</div>             <div></div><div class="amt">$ 10.538.902,11</div></div>
+        <div class="erow"><div class="name">Préstamo</div>              <div></div><div class="amt">$ 1.274.683,90</div></div>
+        <div class="erow"><div class="name">Nicolas Bunda</div>         <div></div><div class="amt">$ 1.095.000,00</div></div>
+        <div class="erow"><div class="name">Redes Sociales</div>        <div></div><div class="amt">$ 800.000,00</div></div>
+        <div class="erow"><div class="name">Ferretería</div>            <div></div><div class="amt">$ 710.000,00</div></div>
+        <div class="erow"><div class="name">Retiro Berto</div>          <div></div><div class="amt">$ 700.000,00</div></div>
+        <div class="erow"><div class="name">Seguro</div>                <div></div><div class="amt">$ 434.042,00</div></div>
+        <div class="erow"><div class="name">Gasto Bancario</div>        <div></div><div class="amt">$ 414.302,23</div></div>
+        <div class="erow"><div class="name">Repuestos</div>             <div></div><div class="amt">$ 315.900,00</div></div>
+        <div class="erow"><div class="name">Insumos Informática</div>   <div></div><div class="amt">$ 102.850,00</div></div>
+        <div class="erow"><div class="name">Gasto</div>                 <div></div><div class="amt">$ 85.000,00</div></div>
+        <div class="erow"><div class="name">Salud Pública</div>         <div></div><div class="amt">$ 81.000,00</div></div>
+        <div class="erow"><div class="name">Gasto Varios</div>          <div></div><div class="amt">$ 59.500,00</div></div>
+        <div class="erow"><div class="name">Inversión</div>             <div></div><div class="amt">$ 59.000,00</div></div>
+        <div class="erow"><div class="name">Sueldo Fábrica</div>        <div></div><div class="amt">$ 50.000,00</div></div>
+        <div class="erow"><div class="name">Combustible</div>           <div></div><div class="amt">$ 50.000,00</div></div>
+        <div class="erow"><div class="name">Mantenimiento</div>         <div></div><div class="amt">$ 40.000,00</div></div>
+        <div class="erow"><div class="name">Flete</div>                 <div></div><div class="amt">$ 15.000,00</div></div>
+        <div class="erow total"><div>Total</div><div></div><div class="amt" style="color:var(--purple)">$ 28.554.627,59</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ICBC + DESGLOSE COMPARATIVO -->
+  <section class="grid">
+    <div class="col-4">
+      <div class="card" style="height:100%">
+        <div class="card-title">Egresos de ICBC</div>
+        <div class="erow"><div class="name">Pago Cheque</div>     <div></div><div class="amt">$ 28.123.239,62</div></div>
+        <div class="erow"><div class="name">Cheque Rechazado</div><div></div><div class="amt">$ 4.448.631,30</div></div>
+        <div class="erow"><div class="name">Gasto Bancario</div>  <div></div><div class="amt">$ 793.516,24</div></div>
+        <div class="erow total"><div>Total Gastos<br/>Bancarios</div><div></div><div class="amt" style="color:var(--blue)">$ 33.365.387,16</div></div>
+      </div>
+    </div>
+
+    <div class="col-8">
+      <div class="card">
+        <div class="card-title">Desglose Comparativo — Egresos</div>
+
+        <div class="desglose-row">
+          <div class="top"><span>Egresos Efectivo</span><span class="v">$ 47.912.818,79</span></div>
+          <div class="bar"><div class="fill" style="width:66%; background: var(--teal)"></div></div>
+          <div class="meta">43.3% del total egresos</div>
+        </div>
+        <div class="desglose-row">
+          <div class="top"><span>Egresos BBVA</span><span class="v">$ 29.274.627,59</span></div>
+          <div class="bar"><div class="fill" style="width:40%; background: var(--orange)"></div></div>
+          <div class="meta">26.5% del total egresos</div>
+        </div>
+        <div class="desglose-row">
+          <div class="top"><span>Egresos ICBC</span><span class="v">$ 33.365.387,16</span></div>
+          <div class="bar"><div class="fill" style="width:46%; background: var(--purple)"></div></div>
+          <div class="meta">30.2% del total egresos</div>
+        </div>
+
+        <div class="neto-box">
+          <div>
+            <div class="label">Resultado Neto</div>
+            <div class="value">$ 1.350.861,68</div>
+          </div>
+          <div class="right">- 1% Pérdida</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot">Datos de muestra · Reproducción estática del Dashboard Económico</p>
+</div>
+</body>
+</html>

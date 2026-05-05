@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Program Files//**)",
+      "Bash(pdftotext -layout \"c:/Users/Administrador/Desktop/Ciaf/brochure/Economico Fabrica marzo 2026.pdf\" \"/tmp/economico.txt\")",
+      "Read(//tmp/**)",
+      "Bash(pdftotext \"c:/Users/Administrador/Desktop/Ciaf/brochure/Economico Fabrica marzo 2026.pdf\" -)",
+      "Bash(pdftotext -raw \"c:/Users/Administrador/Desktop/Ciaf/brochure/Economico Fabrica marzo 2026.pdf\" /tmp/eco.txt)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Administrador\\Desktop\\Ciaf"
+    ]
+  }
+}

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Cheques</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --orange: #F26522;
+    --orange-600: #E5571A;
+    --orange-100: #FFF0E6;
+    --orange-50: #FFF8F3;
+    --green: #16A34A;
+    --green-bg: #F0FDF4;
+    --red: #DC2626;
+    --red-bg: #FEF2F2;
+    --yellow: #D97706;
+    --blue: #2563EB;
+    --purple: #7C3AED;
+    --ink: #0F172A;
+    --ink-2: #334155;
+    --muted: #64748B;
+    --muted-2: #94A3B8;
+    --line: #E2E8F0;
+    --line-soft: #F1F5F9;
+    --bg: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 12px 32px rgba(242, 101, 34, 0.18), 0 2px 6px rgba(15, 23, 42, 0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .num { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  .dashboard {
+    max-width: 1120px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    box-shadow: 0 0 0 1px var(--line);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(120deg, var(--orange) 0%, #F58A4F 100%);
+    color: white;
+    padding: 22px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: "";
+    position: absolute;
+    top: -40%;
+    right: -5%;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .header-block { position: relative; z-index: 1; }
+  .header-block .label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.92;
+    margin-bottom: 6px;
+  }
+  .header-block .value {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .header-right { text-align: right; }
+  .header-right .value { font-size: 32px; }
+
+  .filter-banner {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 32px;
+    background: var(--orange-50);
+    border-bottom: 1px solid var(--orange-100);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .filter-banner.active { display: flex; }
+  .filter-banner .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border: 1px solid var(--orange-100);
+    color: var(--orange-600);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 11px;
+  }
+  .filter-banner .clear {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    padding: 4px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .filter-banner .clear:hover { background: var(--ink); color: white; border-color: var(--ink); }
+
+  /* SECTIONS */
+  .section { padding: 24px 32px 12px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line-soft);
+  }
+  .hint {
+    font-size: 10px;
+    color: var(--muted-2);
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* TABLA DISPONIBILIDAD */
+  .availability-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .availability-table thead th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .availability-table thead th:nth-child(n+2) { text-align: right; }
+  .availability-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--ink-2);
+  }
+  .availability-table tbody td:nth-child(n+2) { text-align: right; }
+  .availability-table tbody tr { transition: background 0.12s; }
+  .availability-table tbody tr:hover { background: var(--bg); }
+  .availability-table tbody tr:last-child td {
+    border-bottom: none;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--bg);
+  }
+  .neg { color: var(--red); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* PERIOD CARDS */
+  .period-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    background: white;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+  .period-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, var(--line));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .period-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent, var(--line));
+  }
+  .period-card:hover::before { opacity: 1; }
+  .period-card.active {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(180deg, var(--accent-bg) 0%, white 70%);
+  }
+  .period-card.active::before { opacity: 1; }
+  .period-card.dimmed { opacity: 0.5; }
+
+  .period-card .pc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .period-card .pc-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .period-card .pc-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .period-card .pc-amount {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.4px;
+    margin-bottom: 4px;
+  }
+  .period-card .pc-count {
+    font-size: 11px;
+    color: var(--muted-2);
+    font-weight: 500;
+  }
+
+  /* STATUS CARDS */
+  .status-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px 16px;
+    background: white;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .status-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent-bg) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  .status-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .status-card:hover::after { opacity: 1; }
+  .status-card .sc-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-card .sc-label::before {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .status-card .sc-amount {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.4px;
+    position: relative;
+    z-index: 1;
+  }
+  .status-card .sc-count {
+    font-size: 11px;
+    color: var(--muted-2);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* CHARTS */
+  .chart-section { padding: 24px 32px; }
+  .chart-header { margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .chart-header h3 { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .chart-header .chart-subtitle { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
+  .chart-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .chart-meta .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+  .chart-container { position: relative; height: 280px; width: 100%; }
+  .chart-container.bar { height: 300px; }
+
+  /* READY TABLE */
+  .ready-section { padding: 24px 32px; }
+  .ready-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .ready-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--orange);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ready-header h3::before {
+    content: "";
+    width: 3px; height: 16px;
+    background: var(--orange);
+    border-radius: 2px;
+  }
+  .ready-header .subtitle { font-size: 11px; color: var(--muted); margin-top: 4px; padding-left: 11px; }
+  .ready-header .total-info { text-align: right; flex-shrink: 0; }
+  .ready-header .total-label { font-size: 11px; color: var(--muted); }
+  .ready-header .total-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.3px;
+  }
+
+  .ready-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .ready-table thead th {
+    background: var(--orange-50);
+    color: var(--ink-2);
+    font-weight: 700;
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--orange-100);
+  }
+  .ready-table thead th.num-col { text-align: right; }
+  .ready-table tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--ink-2);
+  }
+  .ready-table tbody td.num-col { text-align: right; font-weight: 600; color: var(--ink); }
+  .ready-table tbody td.days-col {
+    text-align: right;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ready-table tbody td.days-col.urgent { color: var(--red); }
+  .ready-table tbody td.days-col.soon { color: var(--orange); }
+  .ready-table tbody td.days-col.normal { color: var(--blue); }
+  .ready-table tbody td.days-col.late { color: var(--purple); }
+  .ready-table tbody tr {
+    transition: background 0.12s;
+  }
+  .ready-table tbody tr:hover { background: var(--orange-50); }
+  .ready-table tbody tr:last-child td { border-bottom: none; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim { opacity: 0; animation: fadeUp 0.5s ease-out forwards; }
+
+  /* EMPTY */
+  .empty-row td {
+    text-align: center;
+    color: var(--muted-2);
+    font-style: italic;
+    padding: 32px !important;
+  }
+
+  @media (max-width: 720px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .header { padding: 18px 20px; }
+    .header-block .value, .header-right .value { font-size: 22px; }
+    .section, .chart-section, .ready-section { padding-left: 16px; padding-right: 16px; }
+    .ready-table { font-size: 11px; }
+    .ready-table thead th, .ready-table tbody td { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-block">
+      <div class="label">Total Echeq a Pagar</div>
+      <div class="value num">$ 113.976.440,30</div>
+    </div>
+    <div class="header-block header-right">
+      <div class="label">Cheques a Pagar</div>
+      <div class="value num">41</div>
+    </div>
+  </div>
+
+  <!-- BANNER DE FILTRO ACTIVO -->
+  <div class="filter-banner" id="filterBanner">
+    <span>Filtrando:</span>
+    <span class="chip" id="filterChip"></span>
+    <button class="clear" onclick="clearFilters()">Limpiar filtro</button>
+  </div>
+
+  <!-- DISPONIBILIDAD -->
+  <div class="section anim" style="animation-delay: 0.05s">
+    <div class="section-title">Disponibilidad Bancaria</div>
+    <table class="availability-table">
+      <thead>
+        <tr><th>Entidad</th><th>Saldo</th><th>Acuerdo</th><th>Disponible</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ICBC</td><td class="num neg">-$97.117.023,00</td><td class="num">$0,00</td><td class="num neg">-$97.117.023,00</td></tr>
+        <tr><td>BBVA</td><td class="num">$10.916,00</td><td class="num">$0,00</td><td class="num">$10.916,00</td></tr>
+        <tr><td>EFECTIVO</td><td class="num neg">-$972.162,00</td><td class="num">$0,00</td><td class="num neg">-$972.162,00</td></tr>
+        <tr><td>TOTAL</td><td class="num neg">-$98.078.269,00</td><td class="num">$0,00</td><td class="num neg">-$98.078.269,00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- VENCIMIENTOS -->
+  <div class="section anim" style="animation-delay: 0.12s">
+    <div class="section-title">Vencimientos por Período <span class="hint">— click para filtrar</span></div>
+    <div class="grid-2" id="periodGrid"></div>
+  </div>
+
+  <!-- ESTADOS -->
+  <div class="section anim" style="animation-delay: 0.2s">
+    <div class="section-title">Estado de Cheques</div>
+    <div class="grid-2">
+      <div class="status-card" style="--accent: var(--green); --accent-bg: var(--green-bg);">
+        <div class="sc-label">Pagados</div>
+        <div class="sc-amount num">$ 336.130.235,72</div>
+        <div class="sc-count">122 cheques</div>
+      </div>
+      <div class="status-card" style="--accent: var(--orange); --accent-bg: var(--orange-50);">
+        <div class="sc-label">A Pagar</div>
+        <div class="sc-amount num">$ 113.976.440,30</div>
+        <div class="sc-count">41 cheques</div>
+      </div>
+      <div class="status-card" style="--accent: var(--red); --accent-bg: var(--red-bg);">
+        <div class="sc-label">Rechazados</div>
+        <div class="sc-amount num">$ 58.236.699,04</div>
+        <div class="sc-count">20 cheques</div>
+      </div>
+      <div class="status-card" style="--accent: var(--purple); --accent-bg: #F5F3FF;">
+        <div class="sc-label">Vencidos</div>
+        <div class="sc-amount num">$ 4.690.063,27</div>
+        <div class="sc-count">2 cheques</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINE CHART -->
+  <div class="chart-section anim" style="animation-delay: 0.28s">
+    <div class="chart-header">
+      <div>
+        <h3>Cheques a Pagar — Próximos 30 días</h3>
+        <div class="chart-subtitle">Evolución diaria de montos a pagar</div>
+      </div>
+      <div class="chart-meta"><span class="dot"></span> Monto diario</div>
+    </div>
+    <div class="chart-container">
+      <canvas id="lineChart"></canvas>
+    </div>
+  </div>
+
+  <!-- READY TABLE -->
+  <div class="ready-section anim" style="animation-delay: 0.36s">
+    <div class="ready-header">
+      <div>
+        <h3 id="readyTitle">Cheques Listos para Pagar</h3>
+        <div class="subtitle" id="readySubtitle">Cheques que vencen hoy o ya vencieron (dentro de los 30 días)</div>
+      </div>
+      <div class="total-info">
+        <div class="total-label" id="readyCount">Total 8 cheques</div>
+        <div class="total-amount num" id="readyAmount">$ 28.405.310,45</div>
+      </div>
+    </div>
+    <table class="ready-table">
+      <thead>
+        <tr>
+          <th>Nro</th><th>Proveedor</th><th>Banco</th><th>F. Pago</th>
+          <th class="num-col">Monto</th><th class="num-col">Días</th>
+        </tr>
+      </thead>
+      <tbody id="readyBody"></tbody>
+    </table>
+  </div>
+
+  <!-- BAR CHART -->
+  <div class="chart-section anim" style="animation-delay: 0.44s">
+    <div class="chart-header">
+      <div>
+        <h3>Montos por Período</h3>
+        <div class="chart-subtitle">Click una barra o hover para resaltar</div>
+      </div>
+    </div>
+    <div class="chart-container bar">
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* DATASET */
+  const BUCKETS = {
+    'hoy':   { label: 'Hoy',       color: '#F26522', bg: '#FFF0E6', count: 8,  total: 28405310.45 },
+    '7d':    { label: 'A 7 días',  color: '#D97706', bg: '#FEF3C7', count: 5,  total: 15431789.32 },
+    '7-15':  { label: '7 a 15d',   color: '#2563EB', bg: '#DBEAFE', count: 4,  total: 12983182.18 },
+    '15-30': { label: '15 a 30d',  color: '#2563EB', bg: '#DBEAFE', count: 9,  total: 24228685.23 },
+    '31-60': { label: '31 a 60d',  color: '#7C3AED', bg: '#EDE9FE', count: 10, total: 24849089.53 },
+    '60+':   { label: '> 60 días', color: '#64748B', bg: '#F1F5F9', count: 5,  total: 8078383.59  }
+  };
+
+  const cheques = [
+    // HOY (8)
+    { nro: '106553910', proveedor: 'ICARDI',      banco: 'BANCO ICBC', fPago: '5/4/2026',  monto: 3692069.00, dias: 22, bucket: 'hoy' },
+    { nro: '106553911', proveedor: 'ICARDI',      banco: 'BANCO ICBC', fPago: '12/4/2026', monto: 3692069.00, dias: 15, bucket: 'hoy' },
+    { nro: '—',         proveedor: 'ALYSER',      banco: '—',          fPago: '12/4/2026', monto: 1737410.57, dias: 15, bucket: 'hoy' },
+    { nro: '12353444',  proveedor: 'GOLDSTEIN',   banco: '—',          fPago: '16/4/2026', monto: 5968770.25, dias: 11, bucket: 'hoy' },
+    { nro: '13081531',  proveedor: 'LUCACEN SRL', banco: 'BANCO ICBC', fPago: '16/4/2026', monto: 4193443.06, dias: 11, bucket: 'hoy' },
+    { nro: '106553912', proveedor: 'ICARDI',      banco: 'BANCO ICBC', fPago: '19/4/2026', monto: 3692069.00, dias: 8,  bucket: 'hoy' },
+    { nro: '13081559',  proveedor: 'ALYSER',      banco: '—',          fPago: '19/4/2026', monto: 1737410.57, dias: 8,  bucket: 'hoy' },
+    { nro: '106553913', proveedor: 'ICARDI',      banco: 'BANCO ICBC', fPago: '26/4/2026', monto: 3692069.00, dias: 1,  bucket: 'hoy' },
+
+    // 7d (5)
+    { nro: '106553914', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '02/5/2026', monto: 3692069.00, dias: -3, bucket: '7d' },
+    { nro: '20451223',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '03/5/2026', monto: 4120500.32, dias: -4, bucket: '7d' },
+    { nro: '13081572',  proveedor: 'ALYSER',      banco: '—',              fPago: '04/5/2026', monto: 1737410.57, dias: -5, bucket: '7d' },
+    { nro: '88712044',  proveedor: 'MENIN HNOS',  banco: 'BANCO BBVA',     fPago: '05/5/2026', monto: 2890000.00, dias: -6, bucket: '7d' },
+    { nro: '20451224',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '06/5/2026', monto: 2991809.43, dias: -7, bucket: '7d' },
+
+    // 7-15 (4)
+    { nro: '106553915', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '09/5/2026', monto: 3692069.00, dias: -10, bucket: '7-15' },
+    { nro: '45120033',  proveedor: 'PALADINI SA', banco: 'BANCO SANTANDER',fPago: '11/5/2026', monto: 4250000.00, dias: -12, bucket: '7-15' },
+    { nro: '13081598',  proveedor: 'ALYSER',      banco: '—',              fPago: '13/5/2026', monto: 1737410.57, dias: -14, bucket: '7-15' },
+    { nro: '99001245',  proveedor: 'MOLINOS RIO', banco: 'BANCO MACRO',    fPago: '14/5/2026', monto: 3303702.61, dias: -15, bucket: '7-15' },
+
+    // 15-30 (9)
+    { nro: '106553916', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '16/5/2026', monto: 3692069.00, dias: -17, bucket: '15-30' },
+    { nro: '20451225',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '18/5/2026', monto: 2890000.00, dias: -19, bucket: '15-30' },
+    { nro: '78451200',  proveedor: 'COCA COLA SA',banco: 'BANCO BBVA',     fPago: '19/5/2026', monto: 5120000.00, dias: -20, bucket: '15-30' },
+    { nro: '13081612',  proveedor: 'ALYSER',      banco: '—',              fPago: '20/5/2026', monto: 1737410.57, dias: -21, bucket: '15-30' },
+    { nro: '88712065',  proveedor: 'MENIN HNOS',  banco: 'BANCO BBVA',     fPago: '21/5/2026', monto: 2890000.00, dias: -22, bucket: '15-30' },
+    { nro: '99001260',  proveedor: 'MOLINOS RIO', banco: 'BANCO MACRO',    fPago: '23/5/2026', monto: 1850000.00, dias: -24, bucket: '15-30' },
+    { nro: '12353489',  proveedor: 'GOLDSTEIN',   banco: '—',              fPago: '25/5/2026', monto: 2120000.00, dias: -26, bucket: '15-30' },
+    { nro: '20451226',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '27/5/2026', monto: 1840000.00, dias: -28, bucket: '15-30' },
+    { nro: '45120057',  proveedor: 'PALADINI SA', banco: 'BANCO SANTANDER',fPago: '28/5/2026', monto: 2089205.66, dias: -29, bucket: '15-30' },
+
+    // 31-60 (10)
+    { nro: '106553917', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '02/6/2026', monto: 3692069.00, dias: -34, bucket: '31-60' },
+    { nro: '13081645',  proveedor: 'ALYSER',      banco: '—',              fPago: '06/6/2026', monto: 1737410.57, dias: -38, bucket: '31-60' },
+    { nro: '88712098',  proveedor: 'MENIN HNOS',  banco: 'BANCO BBVA',     fPago: '10/6/2026', monto: 2890000.00, dias: -42, bucket: '31-60' },
+    { nro: '99001288',  proveedor: 'MOLINOS RIO', banco: 'BANCO MACRO',    fPago: '13/6/2026', monto: 2120000.00, dias: -45, bucket: '31-60' },
+    { nro: '20451227',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '15/6/2026', monto: 2890000.00, dias: -47, bucket: '31-60' },
+    { nro: '45120089',  proveedor: 'PALADINI SA', banco: 'BANCO SANTANDER',fPago: '18/6/2026', monto: 2750000.00, dias: -50, bucket: '31-60' },
+    { nro: '78451233',  proveedor: 'COCA COLA SA',banco: 'BANCO BBVA',     fPago: '20/6/2026', monto: 2890000.00, dias: -52, bucket: '31-60' },
+    { nro: '12353501',  proveedor: 'GOLDSTEIN',   banco: '—',              fPago: '23/6/2026', monto: 1850000.00, dias: -55, bucket: '31-60' },
+    { nro: '13081678',  proveedor: 'ALYSER',      banco: '—',              fPago: '26/6/2026', monto: 1737410.57, dias: -58, bucket: '31-60' },
+    { nro: '99001305',  proveedor: 'MOLINOS RIO', banco: 'BANCO MACRO',    fPago: '28/6/2026', monto: 2292199.39, dias: -60, bucket: '31-60' },
+
+    // 60+ (5)
+    { nro: '106553918', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '02/7/2026', monto: 1850000.00, dias: -64, bucket: '60+' },
+    { nro: '88712111',  proveedor: 'MENIN HNOS',  banco: 'BANCO BBVA',     fPago: '08/7/2026', monto: 1620000.00, dias: -70, bucket: '60+' },
+    { nro: '13081699',  proveedor: 'ALYSER',      banco: '—',              fPago: '15/7/2026', monto: 1737410.57, dias: -77, bucket: '60+' },
+    { nro: '20451228',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '20/7/2026', monto: 1450000.00, dias: -82, bucket: '60+' },
+    { nro: '45120120',  proveedor: 'PALADINI SA', banco: 'BANCO SANTANDER',fPago: '28/7/2026', monto: 1420973.02, dias: -90, bucket: '60+' }
+  ];
+
+  /* STATE */
+  const state = { bucket: 'hoy' };
+
+  /* UTILS */
+  const fmtMoney = (n) => {
+    const sign = n < 0 ? '-' : '';
+    const abs = Math.abs(n);
+    return sign + '$ ' + abs.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+  const dayClass = (d) => {
+    if (d <= 1) return 'urgent';
+    if (d <= 10) return 'soon';
+    if (d <= 30) return 'normal';
+    return 'late';
+  };
+
+  /* PERIOD CARDS */
+  function renderPeriodCards() {
+    const grid = document.getElementById('periodGrid');
+    grid.innerHTML = '';
+    Object.entries(BUCKETS).forEach(([key, b], i) => {
+      const card = document.createElement('div');
+      card.className = 'period-card';
+      card.dataset.bucket = key;
+      card.style.setProperty('--accent', b.color);
+      card.style.setProperty('--accent-bg', b.bg);
+      card.style.animation = `fadeUp 0.4s ease-out ${0.15 + i * 0.04}s both`;
+
+      if (state.bucket === key) card.classList.add('active');
+      else if (state.bucket && state.bucket !== 'hoy') card.classList.add('dimmed');
+
+      card.innerHTML = `
+        <div class="pc-head">
+          <div class="pc-label">${b.label}</div>
+          <div class="pc-dot"></div>
+        </div>
+        <div class="pc-amount num">${fmtMoney(b.total)}</div>
+        <div class="pc-count">${b.count} cheques</div>
+      `;
+      card.addEventListener('click', () => selectBucket(key));
+      grid.appendChild(card);
+    });
+  }
+
+  /* TABLE */
+  function renderTable() {
+    const body = document.getElementById('readyBody');
+    const title = document.getElementById('readyTitle');
+    const subtitle = document.getElementById('readySubtitle');
+    const count = document.getElementById('readyCount');
+    const amount = document.getElementById('readyAmount');
+
+    const bucket = state.bucket || 'hoy';
+    const list = cheques.filter(c => c.bucket === bucket);
+    const meta = BUCKETS[bucket];
+
+    title.textContent = bucket === 'hoy' ? 'Cheques Listos para Pagar' : `Cheques — ${meta.label}`;
+    subtitle.textContent = bucket === 'hoy'
+      ? 'Cheques que vencen hoy o ya vencieron (dentro de los 30 días)'
+      : `Cheques con vencimiento en el período "${meta.label}"`;
+    count.textContent = `Total ${list.length} cheque${list.length !== 1 ? 's' : ''}`;
+
+    const totalSum = list.reduce((acc, c) => acc + c.monto, 0);
+    amount.textContent = fmtMoney(totalSum);
+
+    body.innerHTML = '';
+    if (!list.length) {
+      body.innerHTML = '<tr class="empty-row"><td colspan="6">Sin cheques en este período</td></tr>';
+      return;
+    }
+    list.forEach((c, i) => {
+      const tr = document.createElement('tr');
+      tr.style.animation = `fadeUp 0.3s ease-out ${i * 0.025}s both`;
+      const dCls = dayClass(c.dias);
+      const dLabel = c.dias <= 0 ? `${Math.abs(c.dias)}d` : `${c.dias}d`;
+      tr.innerHTML = `
+        <td>${c.nro}</td>
+        <td><strong style="color:var(--ink)">${c.proveedor}</strong></td>
+        <td>${c.banco}</td>
+        <td class="num">${c.fPago}</td>
+        <td class="num-col num">${fmtMoney(c.monto)}</td>
+        <td class="days-col ${dCls}">${dLabel}</td>
+      `;
+      body.appendChild(tr);
+    });
+  }
+
+  /* BANNER */
+  function renderFilterBanner() {
+    const banner = document.getElementById('filterBanner');
+    const chip = document.getElementById('filterChip');
+    if (state.bucket && state.bucket !== 'hoy') {
+      banner.classList.add('active');
+      chip.textContent = `Período: ${BUCKETS[state.bucket].label}`;
+    } else {
+      banner.classList.remove('active');
+    }
+  }
+
+  function selectBucket(key) {
+    state.bucket = (state.bucket === key && key !== 'hoy') ? 'hoy' : key;
+    renderPeriodCards();
+    renderTable();
+    renderFilterBanner();
+    updateBarChart();
+    updateLineChart();
+  }
+
+  function clearFilters() {
+    state.bucket = 'hoy';
+    renderPeriodCards();
+    renderTable();
+    renderFilterBanner();
+    updateBarChart();
+    updateLineChart();
+  }
+
+  /* LINE CHART */
+  const valueLabelPlugin = {
+    id: 'valueLabel',
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      const ds = chart.data.datasets[0];
+      const meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.font = '600 10px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#334155';
+      ctx.textAlign = 'center';
+      meta.data.forEach((point, i) => {
+        const v = ds.data[i];
+        if (v == null || v < 0.5) return;
+        const label = v >= 1 ? '$' + v.toFixed(1) + 'M' : '$' + Math.round(v * 1000) + 'K';
+        ctx.fillText(label, point.x, point.y - 9);
+      });
+      ctx.restore();
+    }
+  };
+
+  const lineLabels = [
+    '27/04','28/04','29/04','30/04','01/05','02/05','03/05','04/05','05/05','06/05',
+    '07/05','08/05','09/05','10/05','11/05','12/05','13/05','14/05','15/05','16/05',
+    '17/05','18/05','19/05','20/05','21/05','22/05','23/05','24/05','25/05','26/05','27/05'
+  ];
+  const lineData = [
+    0, 0, 0, 1.6, 0.964, 6.0, 3.7, 3.4, 0, 1.4,
+    6.8, 0, 2.2, 3.4, 0, 0, 1.0, 0, 9.0, 0,
+    1.0, 3.4, 0, 0.964, 9.2, 0, 0, 0, 0, 0, 0
+  ];
+
+  // bucket → rango de índices
+  const bucketRange = {
+    'hoy':   [0, 6],
+    '7d':    [4, 10],
+    '7-15':  [10, 17],
+    '15-30': [17, 30],
+    '31-60': null,
+    '60+':   null
+  };
+
+  let lineChart;
+  function initLineChart() {
+    const ctx = document.getElementById('lineChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 280);
+    gradient.addColorStop(0, 'rgba(242, 101, 34, 0.32)');
+    gradient.addColorStop(1, 'rgba(242, 101, 34, 0.02)');
+
+    lineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: lineLabels,
+        datasets: [{
+          data: lineData,
+          borderColor: '#F26522',
+          backgroundColor: gradient,
+          fill: true,
+          tension: 0.45,
+          borderWidth: 2.5,
+          pointBackgroundColor: '#F26522',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 1.5,
+          pointRadius: 3.5,
+          pointHoverRadius: 7,
+          pointHoverBorderWidth: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0F172A',
+            padding: 12,
+            titleFont: { family: 'Manrope', weight: '700', size: 12 },
+            bodyFont: { family: 'JetBrains Mono', size: 12 },
+            borderColor: '#F26522',
+            borderWidth: 1,
+            cornerRadius: 8,
+            displayColors: false,
+            callbacks: {
+              title: (items) => 'Día ' + items[0].label,
+              label: (c) => '$ ' + c.parsed.y.toFixed(2) + ' M'
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true, max: 10,
+            ticks: { stepSize: 1, callback: (v) => '$' + v + 'M', color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 } },
+            grid: { color: '#F1F5F9' },
+            border: { display: false }
+          },
+          x: {
+            ticks: { color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 }, maxRotation: 0, autoSkip: true, autoSkipPadding: 18 },
+            grid: { display: false },
+            border: { color: '#E2E8F0' }
+          }
+        }
+      },
+      plugins: [valueLabelPlugin]
+    });
+  }
+
+  function updateLineChart() {
+    const range = bucketRange[state.bucket];
+    lineChart.data.datasets[0].pointBackgroundColor = lineData.map((_, i) => {
+      if (!range) return '#F26522';
+      return (i >= range[0] && i <= range[1]) ? '#F26522' : '#FCD2B8';
+    });
+    lineChart.data.datasets[0].pointRadius = lineData.map((_, i) => {
+      if (!range) return 3.5;
+      return (i >= range[0] && i <= range[1]) ? 5.5 : 2.5;
+    });
+    lineChart.update('active');
+  }
+
+  /* BAR CHART */
+  let barChart;
+  const barOrder = ['hoy', '7d', '7-15', '15-30', '31-60', '60+'];
+
+  function initBarChart() {
+    const ctx = document.getElementById('barChart').getContext('2d');
+    const data = barOrder.map(k => +(BUCKETS[k].total / 1e6).toFixed(2));
+    barChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Hoy', '7d', '15d', '30d', '60d', '>60d'],
+        datasets: [{
+          data,
+          backgroundColor: barOrder.map(k => BUCKETS[k].color),
+          hoverBackgroundColor: barOrder.map(k => BUCKETS[k].color),
+          borderRadius: 6,
+          barPercentage: 0.6,
+          categoryPercentage: 0.78
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        onClick: (evt, elements) => {
+          if (elements.length) selectBucket(barOrder[elements[0].index]);
+        },
+        onHover: (evt, elements) => {
+          evt.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0F172A',
+            padding: 12,
+            titleFont: { family: 'Manrope', weight: '700', size: 12 },
+            bodyFont: { family: 'JetBrains Mono', size: 12 },
+            cornerRadius: 8,
+            displayColors: false,
+            callbacks: {
+              title: (items) => BUCKETS[barOrder[items[0].dataIndex]].label,
+              label: (c) => {
+                const k = barOrder[c.dataIndex];
+                return [
+                  '$ ' + BUCKETS[k].total.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                  BUCKETS[k].count + ' cheques'
+                ];
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true, max: 30,
+            ticks: { stepSize: 5, callback: (v) => '$' + v + 'M', color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 } },
+            grid: { color: '#F1F5F9' },
+            border: { display: false }
+          },
+          x: {
+            ticks: { color: '#475569', font: { family: 'Manrope', weight: '600', size: 11 } },
+            grid: { display: false },
+            border: { color: '#E2E8F0' }
+          }
+        }
+      }
+    });
+  }
+
+  function updateBarChart() {
+    barChart.data.datasets[0].backgroundColor = barOrder.map(k => {
+      if (!state.bucket || state.bucket === 'hoy' || state.bucket === k) return BUCKETS[k].color;
+      return BUCKETS[k].color + '40';
+    });
+    barChart.update('active');
+  }
+
+  /* INIT */
+  document.addEventListener('DOMContentLoaded', () => {
+    renderPeriodCards();
+    renderTable();
+    renderFilterBanner();
+    initLineChart();
+    initBarChart();
+    updateBarChart();
+    updateLineChart();
+  });
+</script>
+</body>
+</html>

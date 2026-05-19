@@ -200,6 +200,7 @@
     font-size:13px; letter-spacing:.06em;
     color:#fff; line-height:1.25;
   }
+  .ac-desc{ display:none; }
 
   /* Pain point pill */
   .pp-pill{
@@ -353,6 +354,209 @@
       radial-gradient(900px 600px at 10% 90%, rgba(30,74,130,.45), transparent 60%),
       var(--ink);
   }
+
+  /* ============================================================
+     PRINT / PDF  —  A4 Landscape, una sección = una página
+  ============================================================ */
+
+  /* @page DEBE estar fuera de @media print para que Chrome/Edge lo respeten */
+  @page {
+    size: 420mm 297mm;
+    margin: 0;
+  }
+
+  @media print {
+    html, body {
+      background: var(--ink) !important;
+      color: #fff !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      font-size: 115% !important;
+    }
+
+    /* Ocultar elementos de navegación / UI / CTAs interactivos */
+    aside, .fs-btn, .modal-overlay,
+    #cli-filter, .freq-tabs,
+    #proceso,
+    .essence-cta,
+    a[href="#stack"] {
+      display: none !important;
+    }
+
+    /* Cada sección ocupa exactamente una página A3 landscape */
+    section {
+      page-break-before: always;
+      break-before: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      width: 420mm;
+      height: 297mm;
+      min-height: 0 !important;
+      max-height: 297mm;
+      overflow: hidden;
+      padding-block: 22px !important;
+      padding-inline: 38px !important;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    section:first-of-type {
+      page-break-before: avoid;
+      break-before: avoid;
+    }
+
+    section > .container-x {
+      width: 100%;
+      max-width: 100%;
+      padding-inline: 0 !important;
+    }
+
+    /* ── PORTADA centrada vertical y horizontalmente ── */
+    #inicio {
+      align-items: center !important;
+      justify-content: center !important;
+      min-height: 0 !important;
+      padding-bottom: 36px !important;
+    }
+
+    #inicio .container-x {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      height: 100%;
+      padding-bottom: 0 !important;
+    }
+
+    #inicio h1 {
+      font-size: clamp(52px, 8vw, 96px) !important;
+      line-height: .92 !important;
+    }
+
+    #inicio img.brand-img {
+      height: 52px !important;
+      margin-bottom: 28px !important;
+    }
+
+    /* Revelar todos los elementos animados */
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    /* Títulos de sección interior */
+    h2.font-display {
+      font-size: clamp(35px, 5.2vw, 67px) !important;
+    }
+
+    .grid { overflow: hidden; }
+
+    .pillar-cell { transform: none !important; z-index: auto !important; }
+
+    .int-stage { aspect-ratio: 16/7 !important; }
+
+    .logo-cell { min-height: 80px !important; padding: 12px 10px !important; }
+    .cli-logo  { max-height: 50px !important; }
+
+    /* ── Hojas 5–8: grilla 4 columnas + descripciones visibles en PDF ── */
+    [id^="servicio-"] .gap-px {
+      grid-template-columns: repeat(4, 1fr) !important;
+    }
+    [id^="servicio-"] .ac-title { font-size: 15px !important; }
+    .ac-desc {
+      display: block !important;
+      font-size: 12px !important;
+      color: rgba(255,255,255,.55) !important;
+      margin-top: 5px !important;
+      line-height: 1.35 !important;
+      font-weight: 400 !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+    }
+
+    /* ── Página 9: IA + Software — forzar 3 columnas explícitas + comprimir ── */
+    #ia-software h2 { font-size: 41px !important; margin-top: 12px !important; }
+    #ia-software p  { font-size: 15px !important; margin-top: 8px !important; line-height: 1.4 !important; }
+    #ia-software .gap-px {
+      grid-template-columns: repeat(3, 1fr) !important;
+      margin-top: 20px !important;
+    }
+    #ia-software .pillar-cell { padding: 18px !important; gap: 12px !important; }
+    #ia-software .pillar-cell svg { width: 24px !important; height: 24px !important; }
+    #ia-software .pillar-cell ul { margin-top: 6px !important; }
+    #ia-software .pillar-cell ul li { font-size: 13px !important; line-height: 1.35 !important; }
+
+    /* ── Página 10: Beneficios — ocultar interactivo, mostrar grilla estática ── */
+    #pp-interactive { display: none !important; }
+    #pp-print {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 1px !important;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.12);
+      margin-top: 24px !important;
+    }
+    .pp-card {
+      background: var(--ink) !important;
+      padding: 22px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 8px !important;
+    }
+    .pp-card-header { display: flex !important; align-items: center !important; gap: 10px !important; }
+    .pp-card-num  { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .18em; color: rgba(255,255,255,.35); }
+    .pp-card-area { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+    .pp-card-problem { font-size: 13px; color: rgba(255,255,255,.5); font-style: italic; line-height: 1.4; }
+    .pp-card-solution { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 17px; text-transform: uppercase; letter-spacing: -.01em; line-height: 1.15; color: #fff; }
+    .pp-card-metric { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: rgba(255,255,255,.6); margin-top: auto !important; padding-top: 10px !important; border-top: 1px solid rgba(255,255,255,.1); }
+
+    /* ── Última página: Clientes — grid estira para llenar el alto disponible ── */
+    #clientes { align-items: stretch !important; }
+    #clientes > .container-x {
+      display: flex !important;
+      flex-direction: column !important;
+      height: 100% !important;
+    }
+    #clientes h2 { font-size: 41px !important; margin-top: 10px !important; }
+    #clients-grid {
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      grid-template-columns: repeat(5, 1fr) !important;
+      grid-auto-rows: 1fr !important;
+      align-content: stretch !important;
+      margin-top: 14px !important;
+    }
+    #clientes .logo-cell {
+      min-height: unset !important;
+      height: 100% !important;
+      padding: 16px 12px !important;
+      gap: 8px !important;
+    }
+    #clientes .cli-logo  { max-height: 90px !important; }
+    #clientes .cli-name  { font-size: 10px !important; }
+    #clientes .gap-8 {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      margin-top: 14px !important;
+      gap: 16px !important;
+    }
+    #clientes .gap-8 p { font-size: 13px !important; line-height: 1.4 !important; }
+    #clientes .gap-8 .pt-6 { padding-top: 8px !important; }
+    #clientes .gap-8 .mb-2 { margin-bottom: 2px !important; }
+
+    /* ── Hoja 4: Outsourcing — forzar 3 columnas + ocultar controles interactivos ── */
+    #outsourcing-controls { display: none !important; }
+    [data-freq-group="diario"]  { display: none !important; }
+    [data-freq-group="mensual"] {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+    #outsourcing [data-freq-group] button > div:last-child { display: none !important; }
+    #outsourcing [data-freq-group] button { cursor: default !important; }
+  }
 </style>
 </head>
 <body class="bg-ink text-white">
@@ -427,74 +631,6 @@
     <!-- Bottom strip: KPIs -->
   </div>
 
-  <!-- ticker -->
-  <div class="absolute bottom-0 inset-x-0 border-t border-white/10 bg-[var(--ink)]/60 overflow-hidden">
-    <!-- Logos ticker — moves right -->
-    <div class="overflow-hidden border-b border-white/10">
-      <div class="ticker-right flex items-center gap-6 py-4 px-3 w-max">
-        <span class="logo-ticker-card"><img src="imagenes_clientes/almendro.png"                    class="logo-ticker-img" alt="Almendro"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/anceltral_gastronomico.png"     class="logo-ticker-img" alt="Ancestral"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/axs.png"                        class="logo-ticker-img" alt="AXS"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/bonafide.png"                   class="logo-ticker-img" alt="Bonafide"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/buffet_gastronomico.png"        class="logo-ticker-img" alt="Buffet"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/circo_beer_gastronomico.png"    class="logo-ticker-img" alt="Circo Beer"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/del_parque_gastronomico.png"    class="logo-ticker-img" alt="Del Parque"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/de_los_andes.png"               class="logo-ticker-img" alt="De los Andes"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/fram.png"                       class="logo-ticker-img" alt="Fram"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/las_invernadas_gastronomico.png" class="logo-ticker-img" alt="Las Invernadas"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/lorsani_gastronomico.png"       class="logo-ticker-img" alt="Lorsani"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/mauri_gastronomico.png"         class="logo-ticker-img" alt="Mauri"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/nadadores.png"                  class="logo-ticker-img" alt="Nadadores"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/nuevo_cuyo.png"                 class="logo-ticker-img" alt="Nuevo Cuyo"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/optica_lic.png"                 class="logo-ticker-img" alt="Óptica Lic"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/parque_parador_gastronomico.png" class="logo-ticker-img" alt="Parque Parador"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/rustik.png"                     class="logo-ticker-img" alt="Rustik"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/santa_clara.png"                class="logo-ticker-img" alt="Santa Clara"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/tagore_gastronomico.png"        class="logo-ticker-img" alt="Tagore"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/usuaia.png"                     class="logo-ticker-img" alt="Ushuaia"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/don_americo.png"               class="logo-ticker-img" alt="Don Américo"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/enjoy.png"                     class="logo-ticker-img" alt="Enjoy RH"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/oeste.png"                     class="logo-ticker-img" alt="Oeste"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/ypf_danpe.png"                 class="logo-ticker-img" alt="YPF Danpe"></span>
-        <!-- duplicate for seamless loop -->
-        <span class="logo-ticker-card"><img src="imagenes_clientes/almendro.png"                    class="logo-ticker-img" alt="Almendro"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/anceltral_gastronomico.png"     class="logo-ticker-img" alt="Ancestral"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/axs.png"                        class="logo-ticker-img" alt="AXS"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/bonafide.png"                   class="logo-ticker-img" alt="Bonafide"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/buffet_gastronomico.png"        class="logo-ticker-img" alt="Buffet"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/circo_beer_gastronomico.png"    class="logo-ticker-img" alt="Circo Beer"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/del_parque_gastronomico.png"    class="logo-ticker-img" alt="Del Parque"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/de_los_andes.png"               class="logo-ticker-img" alt="De los Andes"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/fram.png"                       class="logo-ticker-img" alt="Fram"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/las_invernadas_gastronomico.png" class="logo-ticker-img" alt="Las Invernadas"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/lorsani_gastronomico.png"       class="logo-ticker-img" alt="Lorsani"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/mauri_gastronomico.png"         class="logo-ticker-img" alt="Mauri"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/nadadores.png"                  class="logo-ticker-img" alt="Nadadores"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/nuevo_cuyo.png"                 class="logo-ticker-img" alt="Nuevo Cuyo"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/optica_lic.png"                 class="logo-ticker-img" alt="Óptica Lic"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/parque_parador_gastronomico.png" class="logo-ticker-img" alt="Parque Parador"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/rustik.png"                     class="logo-ticker-img" alt="Rustik"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/santa_clara.png"                class="logo-ticker-img" alt="Santa Clara"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/tagore_gastronomico.png"        class="logo-ticker-img" alt="Tagore"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/usuaia.png"                     class="logo-ticker-img" alt="Ushuaia"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/don_americo.png"               class="logo-ticker-img" alt="Don Américo"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/enjoy.png"                     class="logo-ticker-img" alt="Enjoy RH"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/oeste.png"                     class="logo-ticker-img" alt="Oeste"></span>
-        <span class="logo-ticker-card"><img src="imagenes_clientes/ypf_danpe.png"                 class="logo-ticker-img" alt="YPF Danpe"></span>
-      </div>
-    </div>
-    <!-- Text ticker -->
-    <div class="ticker whitespace-nowrap py-5 font-mono text-[22px] tracking-mega uppercase opacity-60 flex gap-12">
-      <span>+25 Clientes activos</span><span>·</span><span>Contabilidad</span><span>·</span><span>Impuestos</span><span>·</span>
-      <span>06 Áreas de práctica</span><span>·</span><span>Administración</span><span>·</span><span>Finanzas</span><span>·</span>
-      <span>14+ Sistemas integrados</span><span>·</span><span>Outsourcing</span><span>·</span><span>Sistemas y herramientas</span><span>·</span>
-      <span>100% Soluciones a medida</span><span>·</span><span>Inteligencia Artificial</span><span>·</span><span>Software a medida</span><span>·</span><span>Automatización inteligente</span><span>·</span><span>Power BI</span><span>·</span><span>Looker Studio</span><span>·</span>
-      <span>+25 Clientes activos</span><span>·</span><span>Contabilidad</span><span>·</span><span>Impuestos</span><span>·</span>
-      <span>06 Áreas de práctica</span><span>·</span><span>Administración</span><span>·</span><span>Finanzas</span><span>·</span>
-      <span>14+ Sistemas integrados</span><span>·</span><span>Outsourcing</span><span>·</span><span>Sistemas y herramientas</span><span>·</span>
-      <span>100% Soluciones a medida</span><span>·</span><span>Inteligencia Artificial</span><span>·</span><span>Software a medida</span><span>·</span><span>Automatización inteligente</span><span>·</span><span>Power BI</span><span>·</span><span>Looker Studio</span><span>·</span>
-    </div>
-  </div>
 </section>
 
 <!-- ========== ESENCIA / MISIÓN / VISIÓN ========== -->
@@ -805,7 +941,7 @@
 
     <!-- Report selector -->
     <div class="reveal delay-2 mt-14">
-      <div class="flex items-end justify-between mb-5 gap-4 flex-wrap">
+      <div id="outsourcing-controls" class="flex items-end justify-between mb-5 gap-4 flex-wrap">
         <div class="font-mono text-[10px] tracking-mega uppercase text-black/55">// Seleccioná el reporte</div>
         <div class="inline-flex" role="tablist" aria-label="Frecuencia de reportes">
           <button type="button" data-freq="mensual" role="tab" aria-selected="true"
@@ -1027,7 +1163,7 @@
       
     </div>
 
-    <div class="reveal delay-1 mt-14 grid md:grid-cols-12 gap-8">
+    <div id="pp-interactive" class="reveal delay-1 mt-14 grid md:grid-cols-12 gap-8">
       <!-- Pills -->
       <div class="md:col-span-5">
         <div class="font-mono text-[10px] tracking-mega uppercase text-white/55 mb-4">// Situaciones del cliente</div>
@@ -1043,6 +1179,9 @@
         </div>
       </div>
     </div>
+
+    <!-- Grilla estática de 6 beneficios: solo visible en PDF -->
+    <div id="pp-print" class="hidden"></div>
   </div>
 </section>
 
@@ -1159,10 +1298,6 @@
 </section>
 
 
-<!-- Fullscreen control -->
-<button id="fs" class="fs-btn btn !py-2 !px-3 text-[10px] backdrop-blur bg-[rgba(14,31,51,.6)]">
-  <i data-lucide="maximize" class="w-3.5 h-3.5"></i> Pantalla completa
-</button>
 
 <!-- ============== MODAL: DETALLE DE SERVICIO ============== -->
 <div id="modal-service-detail" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="msd-title">
@@ -1387,9 +1522,10 @@ SERVICES.filter(s=>s.id!=='outs' && s.id!=='ia').forEach((s,i)=>{
       ${s.services ? `
         <div class="reveal delay-3 mt-14 font-mono text-[10px] tracking-mega uppercase text-white/55">// Servicios incluidos</div>
         <div class="reveal delay-3 mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-white/10 border-y border-white/10">
-          ${s.services.map(({t}, idx)=>`
+          ${s.services.map(({t, d}, idx)=>`
             <button type="button" class="admin-card" data-idx="${idx}">
               <div class="ac-title">${t}</div>
+              <div class="ac-desc">${d}</div>
             </button>`).join('')}
         </div>
       ` : ''}
@@ -1451,6 +1587,23 @@ function renderPain(id){
   if(window.lucide) lucide.createIcons();
 }
 renderPain('cierre');
+
+/* Beneficios: grilla estática para PDF (invisible en pantalla, visible en @media print) */
+(function(){
+  const el = document.getElementById('pp-print');
+  if(!el) return;
+  el.innerHTML = PAINS.map((p, i) => `
+    <div class="pp-card">
+      <div class="pp-card-header">
+        <span class="pp-card-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="pp-card-area">${p.area}</span>
+      </div>
+      <div class="pp-card-problem">"${p.t}"</div>
+      <div class="pp-card-solution">${p.solution}</div>
+      <div class="pp-card-metric">${p.metric}</div>
+    </div>
+  `).join('');
+})();
 
 /* ============= TIMELINE ============= */
 const tlSteps = document.getElementById('tl-steps');
@@ -1539,7 +1692,8 @@ const railIo = new IntersectionObserver((es)=>{
 sections.forEach(s=>{const el=document.getElementById(s); if(el) railIo.observe(el);});
 
 /* ============= FULLSCREEN ============= */
-document.getElementById('fs').addEventListener('click', ()=>{
+const fsBtn = document.getElementById('fs');
+if(fsBtn) fsBtn.addEventListener('click', ()=>{
   if(!document.fullscreenElement) document.documentElement.requestFullscreen();
   else document.exitFullscreen();
 });

@@ -1,0 +1,11 @@
+{
+  "name": "ciaf-brochure-pdf",
+  "version": "1.0.0",
+  "description": "Generación de PDF del brochure CIAF",
+  "scripts": {
+    "generate": "node generate-pdf.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}

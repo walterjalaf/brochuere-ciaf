@@ -6,34 +6,44 @@
 <title>Dashboard Económico — Marzo 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#eef1f7;
+    --paper:#F5F6F8;
     --card:#ffffff;
-    --ink:#0f172a;
+    --ink:#0E1F33;
     --ink-2:#475569;
     --ink-3:#94a3b8;
     --line:#e6ebf2;
     --line-2:#eef2f8;
-    --brand:#1d3a8a;
-    --brand-2:#2f55c7;
-    --brand-soft:#dbe5fa;
+    --brand:#1E4A82;
+    --brand-2:#2D6CB8;
+    --pearl:#E8EAEC;
+    --soft:#1A1A1A;
+    --accent:#F26522;
     --green:#0f9d6f;
     --amber:#d97706;
     --red:#dc2626;
     --red-soft:#fee2e2;
-    --bar-from:#365fd1;
-    --bar-to:#7aa0f5;
+    --bar-from:#1E4A82;
+    --bar-to:#2D6CB8;
     --shadow: 0 1px 2px rgba(15,23,42,.04), 0 1px 1px rgba(15,23,42,.03);
     --shadow-2: 0 4px 16px rgba(15,23,42,.06);
     --radius:14px;
+    --ciaf-page-w:1180px;
+    --ciaf-radius:14px;
+    --ciaf-radius-sm:10px;
+    --ciaf-pad:28px;
+    --ciaf-gap:16px;
+    --ciaf-shadow:0 1px 2px rgba(14,31,51,.05), 0 4px 16px -8px rgba(14,31,51,.12);
+    --ciaf-shadow-sm:0 1px 2px rgba(14,31,51,.05);
+    --ciaf-line:#e6eaf2;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    font-family:"Manrope", system-ui, sans-serif;
-    background:var(--bg);
+    font-family:'Open Sans', system-ui, sans-serif;
+    background:var(--paper);
     color:var(--ink);
     -webkit-font-smoothing:antialiased;
     font-feature-settings: "ss01","cv11";
@@ -42,9 +52,9 @@
   .num{ font-variant-numeric: tabular-nums; }
 
   .page{
-    max-width:1180px;
+    max-width:var(--ciaf-page-w);
     margin: 0 auto;
-    padding: 40px 28px 80px;
+    padding: 32px var(--ciaf-pad) 56px;
   }
 
   /* ======== HEADER ======== */
@@ -69,18 +79,18 @@
     margin-bottom:6px;
   }
   .header .title{
-    font-family:"Manrope";
+    font-family:'Montserrat', sans-serif;
     font-weight:700;
-    font-size:30px;
+    font-size:24px;
     letter-spacing:-.02em;
     line-height:1.1;
     color:var(--ink);
   }
   .header .title em{
-    font-family:"Fraunces";
+    font-family:'Montserrat', sans-serif;
     font-style:italic;
     font-weight:500;
-    font-size:32px;
+    font-size:24px;
     letter-spacing:-.01em;
     margin-left:4px;
   }
@@ -109,9 +119,9 @@
   }
   .tab:hover{color:var(--ink)}
   .tab.active{
-    background:linear-gradient(180deg, #2c4ec5, #1d3a8a);
+    background:linear-gradient(180deg, var(--brand-2), var(--brand));
     color:#fff;
-    box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 2px 6px rgba(29,58,138,.35);
+    box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 2px 6px rgba(30,74,130,.35);
   }
   .pill{
     display:inline-flex; align-items:center; gap:6px;
@@ -186,7 +196,7 @@
     border-radius:50%;
     display:flex; align-items:center; justify-content:center;
   }
-  .kpi.blue .icon{ background:#e0e9ff; color:#1d3a8a; }
+  .kpi.blue .icon{ background:#e0e9ff; color:var(--brand); }
   .kpi.amber .icon{ background:#ffedd5; color:#b45309; }
   .kpi.red .icon{ background:#fee2e2; color:#b91c1c; }
   .kpi .icon svg{ width:14px; height:14px; }
@@ -374,7 +384,7 @@
   .cmp-row .pct{ color:var(--ink-3); font-size:11.5px; font-weight:600; margin-top:4px; }
   .cmp-row .track{ height:5px; background: var(--line-2); border-radius:999px; margin-top:8px; overflow:hidden; }
   .cmp-row .fill{ height:100%; border-radius:999px; width:0%; transition: width .9s cubic-bezier(.2,.7,.2,1); }
-  .cmp-row .fill.c1{ background: linear-gradient(90deg, #2f55c7, #6f8dec); }
+  .cmp-row .fill.c1{ background: linear-gradient(90deg, var(--brand), var(--brand-2)); }
   .cmp-row .fill.c2{ background: linear-gradient(90deg, #16a34a, #65d390); }
   .cmp-row .fill.c3{ background: linear-gradient(90deg, #f59e0b, #fcd34d); }
   .cmp-row .fill.c4{ background: linear-gradient(90deg, #8b5cf6, #c4b5fd); }
@@ -453,9 +463,34 @@
     .row.row-3, .row.row-2{ grid-template-columns: 1fr 1fr; }
     .btn, .tabs{ display:none; }
   }
+
+  .ciaf-brandbar{background:var(--ink);border-bottom:2px solid var(--accent);}
+  .ciaf-brandbar-inner{max-width:var(--ciaf-page-w);margin:0 auto;padding:16px var(--ciaf-pad);display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .ciaf-logo{height:44px;width:auto;opacity:.95;display:block;}
+  .ciaf-brandbar-meta{text-align:right;}
+  .ciaf-report-name{font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;letter-spacing:-.01em;color:#fff;}
+  .ciaf-report-period{font-family:'Open Sans',sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:3px;}
+  @media (max-width:600px){.ciaf-brandbar-inner{padding:12px 16px;}.ciaf-logo{height:34px;}.ciaf-report-name{font-size:13px;}}
+  @media print{.ciaf-brandbar{background:var(--ink)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+
+  .ciaf-footer{border-top:1px solid var(--ciaf-line);margin-top:40px;background:#fff;}
+  .ciaf-footer-inner{max-width:var(--ciaf-page-w);margin:0 auto;padding:18px var(--ciaf-pad);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .ciaf-footer-brand{font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;color:var(--ink);letter-spacing:.04em;}
+  .ciaf-footer-note{font-size:11px;color:#94a3b8;letter-spacing:.04em;}
+  @media print{.ciaf-footer{display:none;}}
 </style>
 </head>
 <body>
+
+<header class="ciaf-brandbar">
+  <div class="ciaf-brandbar-inner">
+    <img class="ciaf-logo" src="logo_grande.png" alt="CIAF Consultora Integral" />
+    <div class="ciaf-brandbar-meta">
+      <div class="ciaf-report-name">Dashboard Económico</div>
+      <div class="ciaf-report-period">Reporte mensual · Marzo 2026</div>
+    </div>
+  </div>
+</header>
 
 <main class="page">
 
@@ -466,13 +501,7 @@
       <h1 class="title">Dashboard <em>Económico</em></h1>
     </div>
     <div class="right">
-      <div class="tabs" role="tablist">
-        <button class="tab active" data-tab="fabrica" role="tab">Fábrica</button>
-        <button class="tab" data-tab="panaderia" role="tab">Panadería</button>
-        <button class="tab" data-tab="financiero" role="tab">Financiero</button>
-      </div>
-      <span class="pill" id="resultPill">↓ Pérdida 2%</span>
-      
+      <span class="pill" id="resultPill">↑ Ganancia 11,5%</span>
     </div>
   </header>
 
@@ -501,7 +530,7 @@
     <div class="kpi red" id="kpi-resultado-card">
       <div class="label" id="kpi-resultado-label">Resultado económico</div>
       <div class="value num" id="kpi-resultado">$ 0</div>
-      <div class="sub" id="kpi-resultado-sub">Pérdida neta del período</div>
+      <div class="sub" id="kpi-resultado-sub">Ganancia neta del período</div>
       <div class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/>
@@ -552,7 +581,7 @@
 
     <!-- GASTOS GENERALES -->
     <article class="card">
-      <h3>Gastos generales — <span id="gastosTitleVertical">Fábrica</span></h3>
+      <h3>Gastos generales</h3>
       <div id="gastosGenList"></div>
       <div class="total">
         <div class="label">Total</div>
@@ -580,12 +609,19 @@
           <div class="lab" id="netoLabel">Resultado neto</div>
           <div class="val num" id="netoValor">$ 0</div>
         </div>
-        <div class="right" id="netoPct">-2% Pérdida</div>
+        <div class="right" id="netoPct">+11,5% Ganancia</div>
       </div>
     </article>
   </section>
 
 </main>
+
+<footer class="ciaf-footer">
+  <div class="ciaf-footer-inner">
+    <span class="ciaf-footer-brand">CIAF · Consultora Integral</span>
+    <span class="ciaf-footer-note">Reporte generado para uso interno · Datos de muestra</span>
+  </div>
+</footer>
 
 <script>
 // ==========================================================================
@@ -596,10 +632,10 @@
 const DATA = {
   fabrica: {
     titleVertical: "Fábrica",
-    ingresos: 159420659.14,
+    ingresos: 184320659.14,
     egresos:  163132938.02,
-    resultado: -3712278.88,
-    resultPct: -2,
+    resultado: 21187721.12,
+    resultPct: 11.5,
     ventasCliente: [
       ["Central - Franquicia",        14.2, 22575126.23],
       ["Caucete - Franquicia",         9.3, 14814580.56],
@@ -611,18 +647,7 @@ const DATA = {
       ["Desamparados - Franquicia",    5.2,  8239409.35],
       ["Santa Lucia - Franquicia",     4.8,  7687635.07],
       ["Libertador S.R.L",             3.9,  6192266.64],
-      ["Chimbas - Mendoza",            3.8,  5998917.62],
-      ["España e Ig De La Roza",       3.6,  5748613.53],
-      ["Gral Acha - Franquicia",       3.5,  5612156.82],
-      ["Coll - Franquicia",            3.5,  5523796.07],
-      ["Pocito - Franquicia",          3.2,  5064747.32],
-      ["Concepción - Franquicia",      3.0,  4834119.75],
-      ["San Ignacio - Franquicia",     2.8,  4423667.19],
-      ["Chimbas Centenario",           2.1,  3362754.85],
-      ["Puerto Aventura",              1.6,  2604351.38],
-      ["Albardón - Franquicia",        1.3,  2053051.66],
-      ["Venecia",                      0.4,   600936.54],
-      ["Consumidor Final",             0.2,   295635.13]
+      ["Chimbas - Mendoza",            3.8,  5998917.62]
     ],
     ventasDia: [
       ["Lunes",     2437314.79],
@@ -634,8 +659,8 @@ const DATA = {
       ["Domingo",         0.00]
     ],
     egresosClase: [
-      ["Compras",                48.5, 79030068.74, "#365fd1"],
-      ["Retiro Socios",          19.5, 31706851.25, "#7aa0f5"],
+      ["Compras",                48.5, 79030068.74, "#1E4A82"],
+      ["Retiro Socios",          19.5, 31706851.25, "#2D6CB8"],
       ["Sueldos",                13.6, 21746825.99, "#ef4444"],
       ["Gastos y Otros",         10.7, 17092004.79, "#8b5cf6"],
       ["Impuestos y Servicios",   6.7, 10746834.24, "#f59e0b"]
@@ -649,17 +674,7 @@ const DATA = {
       ["Walter Quiroga",              3540000.00],
       ["Papro",                       2966100.00],
       ["Distribuidora Celsa Garcia",  2702255.50],
-      ["Grupo Uma-Per S.A.S",         2556125.00],
-      ["Gonzalo Moraques",            1990610.00],
-      ["Lugones Juan",                1340000.00],
-      ["Jorge Andres Loria",          1111000.00],
-      ["Angel Sanchez Garcia",         364500.20],
-      ["Feria de Rawson",              231000.30],
-      ["San Expedito Papel",           195000.00],
-      ["Agua Tratada Santa Clara",     120000.00],
-      ["Gelusini",                      43000.00],
-      ["GPS San Juan",                  36000.00],
-      ["Atadhya",                       20000.00]
+      ["Grupo Uma-Per S.A.S",         2556125.00]
     ],
     gastosGen: [
       ["Energía Fábrica",          7092598.00],
@@ -675,158 +690,17 @@ const DATA = {
       ["Máquinas y Equipo",         300000.00],
       ["Desagote Pozo",             210000.00],
       ["Honorarios Abogado",        203400.00],
-      ["Servicio de Internet",      189000.00],
-      ["Artículos de Ferretería",   150000.00],
-      ["Sueldos Panadería",         150000.00],
-      ["Service Partner",           132890.00],
-      ["Agua Tratada Santa Clara",  120000.00],
-      ["Pago Maxireet",             116500.00],
-      ["Análisis Salud Pública",    108000.00],
-      ["Publicidad",                100000.00],
-      ["Facturante",                 61172.76],
-      ["Reparaciones",               50000.00],
-      ["Artículos de Librería",      43000.00],
-      ["Service Camión",             20000.00],
-      ["Cuota Sindical",             20000.00],
-      ["Lavado Camión Fábrica",      20000.00],
-      ["Gasto",                      13034.00]
+      ["Servicio de Internet",      189000.00]
     ],
     gastosBanc: [
       ["IMP S/ DEB CT",            647043.38],
       ["IMP S/ CRED CT",           331330.64],
       ["R/RECAUDACION IB SIRCREB", 165665.31],
       ["VISA 024402576",           147607.64],
-      ["COM AT PAGO CH",           120060.00],
-      ["COM MANT CT",              102000.00],
-      ["PAGO VISA",                 96534.38],
-      ["IVA",                       52621.60],
-      ["DEB LIQ INTER",             20315.50]
-    ]
-  },
-
-  panaderia: {
-    titleVertical: "Panadería",
-    ingresos: 78540210.00,
-    egresos:  74120480.00,
-    resultado: 4419730.00,
-    resultPct: 5.6,
-    ventasCliente: [
-      ["Mostrador Centro",           28.4, 22305000.00],
-      ["Pedidos Rappi",              14.1, 11074600.00],
-      ["Pedidos PedidosYa",          11.7,  9189200.00],
-      ["Mayorista Santa Lucía",       9.8,  7696900.00],
-      ["Eventos / Catering",          7.4,  5811900.00],
-      ["Hotel Provincial",            5.3,  4162600.00],
-      ["Café Aroma",                  4.9,  3848500.00],
-      ["Restaurante La Esquina",      4.2,  3298700.00],
-      ["Confitería Norte",            3.8,  2984500.00],
-      ["Quiosco UNSJ",                3.2,  2513300.00],
-      ["Otros minoristas",            7.2,  5654010.00]
-    ],
-    ventasDia: [
-      ["Lunes",     11200400.00],
-      ["Martes",    12480000.00],
-      ["Miércoles", 11960500.00],
-      ["Jueves",    11340800.00],
-      ["Viernes",   13670200.00],
-      ["Sábado",    14210110.00],
-      ["Domingo",    3678200.00]
-    ],
-    egresosClase: [
-      ["Compras",                52.0, 38542650.00, "#365fd1"],
-      ["Sueldos",                21.0, 15565300.00, "#ef4444"],
-      ["Gastos y Otros",         12.0,  8894458.00, "#8b5cf6"],
-      ["Retiro Socios",           9.5,  7041446.00, "#7aa0f5"],
-      ["Impuestos y Servicios",   5.5,  4076626.00, "#f59e0b"]
-    ],
-    comprasProv: [
-      ["Molino San José",          14250000.00],
-      ["Lácteos del Sol",           6890000.00],
-      ["Distribuidora Andina",      5420000.00],
-      ["Huevos Cuyo",               3640500.00],
-      ["Azúcar Litoral",            2880000.00],
-      ["Levaduras Calsa",           1990500.00],
-      ["Papelera del Norte",         960000.00],
-      ["Frutos Secos San Juan",      890000.00],
-      ["Envases Plásticos S.A",      720000.00],
-      ["Limpieza Total",             456000.00],
-      ["Otros proveedores",          445650.00]
-    ],
-    gastosGen: [
-      ["Energía Panadería",       2840000.00],
-      ["Alquiler Local",          1200000.00],
-      ["Sueldos Vendedoras",      1100000.00],
-      ["Mantenimiento Hornos",     680000.00],
-      ["Combustible Reparto",      540000.00],
-      ["Servicio de Internet",     189000.00],
-      ["Limpieza",                 180000.00],
-      ["Uniformes",                120000.00],
-      ["Publicidad Local",         100000.00],
-      ["Cuota Sindical",            48000.00]
-    ],
-    gastosBanc: [
-      ["IMP S/ DEB CT",            420050.00],
-      ["IMP S/ CRED CT",           188400.00],
-      ["VISA 024402576",            98760.00],
-      ["COM MANT CT",               60000.00],
-      ["IVA",                       28400.00]
-    ]
-  },
-
-  financiero: {
-    titleVertical: "Financiero",
-    ingresos: 12480300.00,
-    egresos:   8945200.00,
-    resultado: 3535100.00,
-    resultPct: 28.3,
-    ventasCliente: [
-      ["Plazo Fijo Banco Galicia",   34.8,  4344944.00],
-      ["FCI Pellegrini Renta Fija",  22.4,  2795587.00],
-      ["LECAPs Junio 2026",          14.0,  1747242.00],
-      ["Caución Bursátil",            9.5,  1185628.00],
-      ["Bonos AL30",                  7.2,   898581.00],
-      ["Cuenta Remunerada MP",        5.1,   636495.00],
-      ["FCI MercadoFondo",            4.0,   499212.00],
-      ["Otros instrumentos",          3.0,   372611.00]
-    ],
-    ventasDia: [
-      ["Lunes",     1820500.00],
-      ["Martes",    1980200.00],
-      ["Miércoles", 2110800.00],
-      ["Jueves",    1740300.00],
-      ["Viernes",   2490500.00],
-      ["Sábado",    1438000.00],
-      ["Domingo",    900000.00]
-    ],
-    egresosClase: [
-      ["Comisiones ALYC",         42.0, 3756984.00, "#365fd1"],
-      ["Impuesto a las Ganancias",26.0, 2325752.00, "#f59e0b"],
-      ["IIBB Servicios Financ.",  14.0, 1252328.00, "#ef4444"],
-      ["Honorarios Asesor",       11.0,  983972.00, "#8b5cf6"],
-      ["Otros costos",             7.0,  626164.00, "#7aa0f5"]
-    ],
-    comprasProv: [
-      ["Bull Market Brokers",      2940000.00],
-      ["Banco Galicia",            1880000.00],
-      ["Mercado Pago Inversiones", 1240000.00],
-      ["Allaria Ledesma",           890000.00],
-      ["Estudio Contable Pérez",    540000.00],
-      ["IOL Invertir Online",       420000.00]
-    ],
-    gastosGen: [
-      ["Honorarios Asesor Inversión", 980000.00],
-      ["Suscripción Bloomberg",       420000.00],
-      ["Software de gestión",         180000.00],
-      ["Licencias plataforma",        120000.00],
-      ["Capacitación",                 80000.00]
-    ],
-    gastosBanc: [
-      ["IMP S/ CRED CT",           245000.00],
-      ["IMP S/ DEB CT",            178000.00],
-      ["COM TRANSF MEP",            96000.00],
-      ["IVA Comisiones",            68400.00]
+      ["COM MANT CT",              102000.00]
     ]
   }
+
 };
 
 // ============================================================
@@ -864,8 +738,6 @@ function renderHeader(d){
   sub.textContent = profit ? "Ganancia neta del período" : "Pérdida neta del período";
   pill.classList.toggle("profit", profit);
   pill.textContent = (profit ? "↑ Ganancia " : "↓ Pérdida ") + Math.abs(d.resultPct).toFixed(1) + "%";
-
-  document.getElementById("gastosTitleVertical").textContent = d.titleVertical;
 }
 
 function renderVentasCliente(list){
@@ -1073,19 +945,6 @@ function render(verticalKey){
   renderGastosBanc(d.gastosBanc);
   renderComparativo(d);
 }
-
-// ============================================================
-// TABS
-// ============================================================
-document.querySelectorAll(".tab").forEach(t => {
-  t.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
-    t.classList.add("active");
-    render(t.dataset.tab);
-    // close any open detail on tab change
-    document.querySelectorAll(".detail.open").forEach(d => d.remove());
-  });
-});
 
 // initial render
 render("fabrica");

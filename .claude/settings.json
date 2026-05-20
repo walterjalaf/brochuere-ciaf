@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.panificadoramauri.com.ar)",
+      "WebFetch(domain:parqueparador.com)",
+      "WebFetch(domain:aehgasanjuan.com.ar)",
+      "Bash(curl -L -s -o \"C:\\\\Users\\\\Administrador\\\\Desktop\\\\Ciaf\\\\brochure\\\\imagenes_clientes\\\\mauri_gastronomico.png\" \"https://www.panificadoramauri.com.ar/wp-content/themes/mauri/img/logo.png\" --user-agent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
+      "Bash(curl -L -s -o \"C:\\\\Users\\\\Administrador\\\\Desktop\\\\Ciaf\\\\brochure\\\\imagenes_clientes\\\\parque_parador_gastronomico.svg\" \"https://parqueparador.com/logo-parque-parador.svg\" --user-agent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
+      "WebFetch(domain:sanjuan.tur.ar)",
+      "WebFetch(domain:heladeriascannapieco.com.ar)",
+      "WebFetch(domain:elalmendroeventos.com.ar)",
+      "WebFetch(domain:aguasantaclara.com.ar)",
+      "WebFetch(domain:www.opticalic.com.ar)",
+      "WebFetch(domain:rustikaventura.com.ar)",
+      "Bash(curl -L -s -o \"C:\\\\Users\\\\Administrador\\\\Desktop\\\\Ciaf\\\\brochure\\\\imagenes_clientes\\\\rustik.png\" \"http://dcdn-us.mitiendanube.com/stores/003/546/666/themes/common/logo-1536882356-1694184862-5b9fb700a3d03c8de1c7d5bbfa423b261694184863.png?0\" --user-agent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
+      "Bash(curl -L -s -o \"C:\\\\Users\\\\Administrador\\\\Desktop\\\\Ciaf\\\\brochure\\\\imagenes_clientes\\\\optica_lic.png\" \"http://dcdn-us.mitiendanube.com/stores/006/516/632/themes/common/logo-1581300469-1762470149-054b268fe350cfc17d677cf23a6872521762470150.png?0\" --user-agent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
+      "WebFetch(domain:www.framsanjuan.com)",
+      "Bash(curl -L -s -o \"C:\\\\Users\\\\Administrador\\\\Desktop\\\\Ciaf\\\\brochure\\\\imagenes_clientes\\\\fram.png\" \"https://framsanjuan.com/gallery_gen/257463103c92f3ca8e9551c76b6853bd_601x251.66875.png\" --user-agent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
+      "WebFetch(domain:framserviciossj.webnode.page)",
+      "WebFetch(domain:companieslogo.com)",
+      "Bash(curl -L -s -o \"C:\\\\Users\\\\Administrador\\\\Desktop\\\\Ciaf\\\\brochure\\\\imagenes_clientes\\\\ypf_danpe.png\" \"https://companieslogo.com/img/orig/YPF_BIG-deb88f6e.png?t=1720244494&download=true\" --user-agent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
+      "WebFetch(domain:www.diariohuarpe.com)",
+      "mcp__claude_ai_Google_Drive__get_file_metadata",
+      "Bash(curl -L -s -o \"C:\\\\Users\\\\Administrador\\\\Desktop\\\\Ciaf\\\\brochure\\\\imagenes_clientes\\\\anceltral_color_check.png\" \"https://cervezaancestral.com/wp-content/uploads/2023/02/chrome_xsGfhpZZu3.png\" --user-agent \"Mozilla/5.0\")"
+    ]
+  }
+}

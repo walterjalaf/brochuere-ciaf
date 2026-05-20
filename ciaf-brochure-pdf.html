@@ -235,59 +235,150 @@
   .cli-logo{ max-width:90%; max-height:72px; width:auto; height:auto; object-fit:contain; display:block; }
   .cli-name{ font-size:10px; letter-spacing:.07em; text-transform:uppercase; text-align:center; font-weight:700; opacity:.55; line-height:1.3; }
 
-  /* ── Integration map (Stack / 12) ── */
-  .int-outer{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  .int-stage{
-    position:relative; width:100%; min-width:580px; aspect-ratio:16/9;
-    overflow:visible;
+  /* ── PCB Stack (Stack / 12) ── */
+  .pcb-outer{ position:relative; width:100%; margin-top:12px; overflow:hidden; }
+  .pcb-canvas{
+    position:relative; width:1500px; height:1280px;
+    background:radial-gradient(ellipse at 50% 55%, #112849 0%, #07101f 65%);
+    transform-origin:0 0; border-radius:12px; overflow:hidden;
   }
-  .int-svg{
-    position:absolute; inset:0; width:100%; height:100%;
-    pointer-events:none; overflow:visible;
+  .pcb-grid{
+    position:absolute; inset:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:40px 40px;
   }
-  .int-hub{
-    position:absolute; left:50%; top:50%;
-    transform:translate(-50%,-50%);
-    width:80px; height:80px; border-radius:14px;
-    background:var(--brand);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:2px; z-index:10;
-    box-shadow:0 0 48px rgba(242,101,34,.55), 0 0 0 5px rgba(242,101,34,.18);
+  .pcb-svg{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+
+  /* Chip */
+  .pcb-chip{ position:absolute; left:600px; top:380px; width:300px; height:320px; }
+  .pcb-chip-body{
+    position:absolute; top:14px; left:14px; right:14px; bottom:14px;
+    border-radius:18px;
+    background:linear-gradient(160deg,#1f4790 0%,#15356d 55%,#0e2a5c 100%);
+    box-shadow:0 0 0 1.5px rgba(245,166,35,.85),0 0 80px rgba(245,166,35,.35),
+      inset 0 1px 0 rgba(255,255,255,.18),inset 0 -20px 40px rgba(0,0,0,.35);
+    overflow:hidden; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
   }
-  .int-hub-logo{
-    font-family:var(--font-display,sans-serif); font-weight:900;
-    color:#fff; font-size:17px; letter-spacing:-.01em; line-height:1;
+  .pcb-chip-innergrid{
+    position:absolute; inset:0; pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+    background-size:20px 20px;
   }
-  .int-hub-sub{
-    font-size:7.5px; letter-spacing:.14em; text-transform:uppercase;
-    color:rgba(255,255,255,.72); font-weight:600;
+  .pcb-chip-notch{
+    position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:36px; height:6px; background:#F5A623; border-radius:0 0 6px 6px;
   }
-  .int-node{
-    position:absolute; transform:translate(-50%,-50%);
-    display:flex; flex-direction:column; align-items:center; gap:5px;
-    z-index:5; cursor:default;
-    transition:transform .25s cubic-bezier(.2,.7,.2,1);
+  .pcb-chip-dots{ position:absolute; top:12px; left:12px; display:flex; gap:5px; }
+  .pcb-chip-dots i{ display:block; width:5px; height:5px; border-radius:50%; font-style:normal; }
+  .pcb-chip-dots i:first-child{ background:#F5A623; box-shadow:0 0 6px #F5A623; }
+  .pcb-chip-dots i:last-child{ background:rgba(255,255,255,.3); }
+  .pcb-chip-version{
+    position:absolute; top:10px; right:12px;
+    font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,.5);
   }
-  .int-node:hover{ transform:translate(-50%,-50%) scale(1.1); }
-  .int-card{
-    background:rgba(255,255,255,.96); border-radius:8px;
-    padding:7px 13px;
-    font-family:var(--font-display,sans-serif); font-weight:800;
-    font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;
-    color:#1a2236; text-align:center; white-space:nowrap;
-    border-bottom:3px solid var(--nc,#F26522);
-    box-shadow:0 2px 10px rgba(0,0,0,.28);
-    transition:box-shadow .25s;
+  .pcb-chip-center{ position:relative; text-align:center; z-index:1; }
+  .pcb-chip-title{
+    font-family:'Montserrat',sans-serif; font-weight:800;
+    font-size:72px; color:#fff; letter-spacing:.045em; line-height:.88;
+    text-shadow:0 2px 14px rgba(0,0,0,.5);
   }
-  .int-node:hover .int-card{
-    box-shadow:0 6px 28px rgba(0,0,0,.38), 0 0 0 2px var(--nc,#F26522);
+  .pcb-chip-sub{
+    margin-top:16px; font-family:'JetBrains Mono',monospace;
+    font-size:11px; color:#F5A623; letter-spacing:3.5px;
   }
-  .int-cat{
-    font-size:7.5px; letter-spacing:.13em; text-transform:uppercase;
-    color:rgba(255,255,255,.42); font-weight:700; text-align:center;
-    transition:color .25s;
+  .pcb-chip-divider{
+    border-top:1px solid rgba(255,255,255,.14); margin:12px auto 0; padding-top:12px;
   }
-  .int-node:hover .int-cat{ color:var(--nc,#F26522); }
+  .pcb-chip-tagline{
+    font-family:'Montserrat',sans-serif; font-weight:400; font-size:12px;
+    color:rgba(255,255,255,.78); line-height:1.5; max-width:220px; margin:0 auto;
+  }
+  .pcb-chip-serial{
+    position:absolute; bottom:10px;
+    font-family:'JetBrains Mono',monospace; font-size:8.5px;
+    color:rgba(255,255,255,.35); letter-spacing:1px;
+  }
+  .pcb-pin{
+    position:absolute; background:rgba(180,210,255,.55);
+    border-radius:2px; box-shadow:0 0 6px rgba(245,166,35,.6);
+  }
+
+  /* Pill */
+  .pcb-pill{
+    position:absolute; display:flex; align-items:center; gap:9px;
+    padding:6px 12px 6px 6px; height:64px;
+    background:#fbfcfe; border-radius:999px;
+    border:1.5px solid var(--cat-color,#ccc);
+    box-shadow:0 6px 20px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.05);
+    transition:all .25s cubic-bezier(.22,.61,.36,1);
+    cursor:default; transform:translate(-50%,-50%); z-index:2;
+    box-sizing:border-box;
+  }
+  .pcb-pill.is-dim{ opacity:.35; filter:saturate(.6); }
+  .pcb-pill:hover{
+    transform:translate(-50%,-50%) translateY(-2px); z-index:10;
+    box-shadow:0 10px 32px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.1);
+  }
+  .pcb-pill-mark{
+    width:44px; height:44px; border-radius:10px; flex-shrink:0;
+    background:var(--cat-color); display:flex; align-items:center; justify-content:center;
+    box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.08); padding:5px;
+  }
+  .pcb-pill-mark.is-dark{ background:#13162a; }
+  .pcb-pill-logo{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
+  .pcb-pill-text{ overflow:hidden; min-width:0; flex:1; }
+  .pcb-pill-name{
+    font-family:'Montserrat',sans-serif; font-weight:700; font-size:13.5px;
+    color:#0a1628; letter-spacing:.3px; text-transform:uppercase;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2;
+  }
+  .pcb-pill-sub{
+    font-family:'JetBrains Mono',monospace; font-size:9.5px;
+    text-transform:uppercase; color:var(--cat-dim,#666);
+    letter-spacing:1px; margin-top:3px; line-height:1.2;
+  }
+
+  /* Legend + footer */
+  .pcb-legend{
+    border-top:1px dashed rgba(255,255,255,.08);
+    padding-top:14px; margin-bottom:10px;
+    display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  }
+  .pcb-legend-label{
+    font-family:'JetBrains Mono',monospace; font-size:10px;
+    color:#5C7595; letter-spacing:2px; text-transform:uppercase; margin-right:4px;
+  }
+  .pcb-cat-pill{
+    display:inline-flex; align-items:center; gap:7px; border-radius:999px;
+    padding:7px 14px; background:rgba(255,255,255,.025);
+    border:1px solid rgba(255,255,255,.08);
+    font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px;
+    text-transform:uppercase; color:#e7ecf3; letter-spacing:.5px;
+    cursor:default; transition:all .2s;
+  }
+  .pcb-cat-pill:hover{ background:rgba(255,255,255,.06); border-color:var(--cat-color); }
+  .pcb-cat-pill .dot{
+    width:8px; height:8px; border-radius:50%; background:var(--cat-color);
+    box-shadow:0 0 10px var(--cat-color); flex-shrink:0;
+  }
+  .pcb-status{
+    border-top:1px dashed rgba(255,255,255,.08); padding-top:14px; margin-top:12px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+    font-family:'JetBrains Mono',monospace; font-size:11px;
+    letter-spacing:1.4px; color:#5C7595; text-transform:uppercase;
+  }
+  .pcb-pulse{
+    display:inline-block; width:7px; height:7px; border-radius:50%;
+    background:#5EE3A0; margin-right:8px;
+    animation:pcb-pulse-glow 1.6s infinite;
+  }
+  @keyframes pcb-pulse-trace{ 0%,100%{ stroke-opacity:.22 } 50%{ stroke-opacity:.70 } }
+  @keyframes pcb-pulse-glow{ 0%,100%{ opacity:.4;transform:scale(1) } 50%{ opacity:.9;transform:scale(1.15) } }
 
   /* Custom scroll-snap hint dots in hero */
   .ticker{ animation: tick 36s linear infinite; }
@@ -338,6 +429,32 @@
   .on-paper .pp-pill{border-color:var(--line-dark); background:#fff;}
   .on-paper .pp-pill:hover{border-color:var(--ink);}
   .on-paper .pp-pill.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+  /* Outsourcing: fondo oscuro (override de on-paper) */
+  #outsourcing {
+    background: var(--ink) !important;
+    border-top-color: rgba(255,255,255,.1) !important;
+    color: #fff !important;
+  }
+  #outsourcing h2 { color: #fff !important; }
+  #outsourcing > .container-x > div:first-child p { color: rgba(255,255,255,.6) !important; }
+  #outsourcing #outsourcing-controls > div:first-child { color: rgba(255,255,255,.4) !important; }
+  #outsourcing [data-freq-group] {
+    background: rgba(255,255,255,.1) !important;
+    border-color: rgba(255,255,255,.1) !important;
+  }
+  #outsourcing [data-freq-group] > button {
+    background: var(--ink) !important;
+  }
+  #outsourcing [data-freq-group] > button:hover {
+    background: rgba(255,255,255,.07) !important;
+  }
+  #outsourcing [data-freq-group] > button > div:first-child > span { color: rgba(255,255,255,.3) !important; }
+  #outsourcing [data-freq-group] .font-display { color: #fff !important; }
+  #outsourcing [data-freq-group] > button > p { color: rgba(255,255,255,.5) !important; }
+
+  /* ── Diapositivas de reporte — ocultas en pantalla, visibles en PDF ── */
+  .report-slide { display: none; }
 
   /* hide scrollbar inside service detail */
   .no-scrollbar::-webkit-scrollbar{display:none}
@@ -456,7 +573,14 @@
 
     .pillar-cell { transform: none !important; z-index: auto !important; }
 
-    .int-stage { aspect-ratio: 16/7 !important; }
+    .pcb-canvas { transform: scale(0.66) !important; transform-origin: top center !important; }
+    .pcb-outer  { height: 850px !important; overflow: hidden !important; display: flex !important; justify-content: center !important; }
+    .pcb-legend { padding-top: 6px !important; margin-bottom: 4px !important; }
+    .pcb-status { padding-top: 6px !important; margin-top: 4px !important; }
+    #stack .mt-8 { margin-top: 8px !important; }
+    #stack .mt-5 { margin-top: 4px !important; }
+    #stack h2 { font-size: 40px !important; line-height: .95 !important; }
+    #stack p { font-size: 13px !important; line-height: 1.4 !important; }
 
     .logo-cell { min-height: 80px !important; padding: 12px 10px !important; }
     .cli-logo  { max-height: 50px !important; }
@@ -547,15 +671,40 @@
     #clientes .gap-8 .pt-6 { padding-top: 8px !important; }
     #clientes .gap-8 .mb-2 { margin-bottom: 2px !important; }
 
-    /* ── Hoja 4: Outsourcing — forzar 3 columnas + ocultar controles interactivos ── */
+    /* ── Hoja 4: Outsourcing — ocultar tarjetas interactivas ── */
     #outsourcing-controls { display: none !important; }
-    [data-freq-group="diario"]  { display: none !important; }
-    [data-freq-group="mensual"] {
+    #outsourcing [data-freq-group] { display: none !important; }
+
+    /* ── Diapositivas de reporte — visibles solo en PDF ── */
+    .report-slide { display: flex !important; }
+
+    /* Tailwind md: breakpoints no aplican en print — forzar grids explícitamente */
+    .report-slide .gap-10 {
+      display: grid !important;
+      grid-template-columns: 8fr 4fr !important;
+      gap: 20px !important;
+      align-items: end !important;
+    }
+    .report-slide .gap-px {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr) !important;
+      margin-top: 18px !important;
     }
-    #outsourcing [data-freq-group] button > div:last-child { display: none !important; }
-    #outsourcing [data-freq-group] button { cursor: default !important; }
+    /* Tipografías generosas — las diapositivas tienen aire de sobra en A3 */
+    .report-slide h2.font-display {
+      font-size: 83px !important;
+      line-height: .92 !important;
+      margin-top: 16px !important;
+    }
+    .report-slide p { font-size: 21px !important; line-height: 1.45 !important; margin-top: 14px !important; }
+    .report-slide .text-xl { font-size: 25px !important; line-height: 1.25 !important; }
+    .report-slide .font-mono.text-\[10px\] { font-size: 14px !important; }
+    .report-slide ul li { font-size: 18px !important; line-height: 1.45 !important; }
+    .report-slide .mt-2 { margin-top: 9px !important; }
+    .report-slide .p-8 { padding: 32px 28px !important; }
+    .report-slide .space-y-3 > li { margin-top: 12px !important; }
+    .report-slide .gap-5 { gap: 16px !important; }
+    .report-slide .ribbon { font-size: 14px !important; }
   }
 </style>
 </head>
@@ -926,7 +1075,7 @@
 </section>
 
 <!-- ========== OUTSOURCING / 04 ========== -->
-<section id="outsourcing" class="bg-paper on-paper text-[var(--soft)] border-t border-black/5" data-screen-label="04 Outsourcing">
+<section id="outsourcing" class="border-t border-white/10" data-screen-label="04 Outsourcing">
   <div class="container-x">
     <div class="grid md:grid-cols-12 gap-10 items-end">
       <div class="md:col-span-12 reveal">
@@ -936,7 +1085,25 @@
         </h2>
         <p class="mt-5 max-w-xl text-black/70">No es tercerizar tareas. Es incorporar un equipo a tu operación. Liquidamos, conciliamos, presentamos y reportamos — y te entregamos los reportes que necesitás para decidir.</p>
       </div>
-      
+
+    </div>
+
+    <!-- Descripción + beneficios -->
+    <div class="grid md:grid-cols-12 gap-10 mt-12 reveal delay-1">
+      <div class="md:col-span-7 space-y-5">
+        <p class="text-white/85 leading-relaxed text-lg">El outsourcing administrativo te permite <strong class="text-white">simplificar</strong> tus operaciones, <strong class="text-white">reducir</strong> costos y <strong class="text-white">mejorar</strong> la eficiencia de tu negocio.</p>
+        <p class="text-white/70 leading-relaxed">Al delegar las tareas administrativas en un proveedor externo, puedes concentrarte en lo que realmente importa: <strong class="text-white">hacer crecer tu empresa</strong>.</p>
+      </div>
+      <div class="md:col-span-5">
+        <div class="font-mono text-[15px] tracking-mega uppercase text-white/45 mb-4">¿Cuáles son sus beneficios?</div>
+        <ul class="space-y-2.5">
+          <li class="flex items-center gap-3 text-white/80"><span class="w-1.5 h-1.5 rounded-full bg-[var(--brand)] shrink-0"></span>Ahorra tiempo y dinero</li>
+          <li class="flex items-center gap-3 text-white/80"><span class="w-1.5 h-1.5 rounded-full bg-[var(--brand)] shrink-0"></span>Mayor eficiencia</li>
+          <li class="flex items-center gap-3 text-white/80"><span class="w-1.5 h-1.5 rounded-full bg-[var(--brand)] shrink-0"></span>Acceso a expertos</li>
+          <li class="flex items-center gap-3 text-white/80"><span class="w-1.5 h-1.5 rounded-full bg-[var(--brand)] shrink-0"></span>Flexibilidad</li>
+          <li class="flex items-center gap-3 text-white/80"><span class="w-1.5 h-1.5 rounded-full bg-[var(--brand)] shrink-0"></span>Enfoque en el core business</li>
+        </ul>
+      </div>
     </div>
 
     <!-- Report selector -->
@@ -1059,6 +1226,252 @@
     </div>
 
     
+  </div>
+</section>
+
+<!-- ========== REPORTE: ECONÓMICO ========== -->
+<section id="reporte-eco" class="report-slide border-t border-white/10 relative" data-screen-label="04.1 Reporte Económico">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8">
+        <span class="ribbon">Reporte Económico · 01 / 05</span>
+        <h2 class="font-display font-extrabold uppercase tracking-tight mt-8 text-5xl md:text-6xl leading-[.95]">
+          Económico.
+        </h2>
+        
+        <p class="mt-5 max-w-2xl text-white/70 text-lg leading-relaxed">Muestra la rentabilidad real del período, cuales fueron los ingresos, egresos y el resultado.>
+      </div>
+      <div class="md:col-span-4">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Estado de resultados · Mensual</div>
+        <div class="font-display font-extrabold uppercase tracking-tight text-xl text-white/85 mt-2 leading-tight">Conocé qué negocios generaron ganancias y cuales generaron pérdidas en el período.</div>
+      </div>
+    </div>
+
+    <div class="mt-14 grid md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Qué contiene</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Ingresos por línea de negocio</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Costo de mercadería vendida (CMV)</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Gastos operativos clasificados</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Resultado bruto y resultado neto</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Comparativo vs período anterior</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Con qué decidís</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cuál línea de negocio es rentable</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Dónde están los mayores costos</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Si el negocio creció o decreció</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>En qué cortar o dónde invertir más</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Formato y entrega</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Archivo Excel con estructura fija</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Hoja única con drill-down por categoría</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cierre al 5° día hábil de cada mes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== REPORTE: FINANCIERO ========== -->
+<section id="reporte-fin" class="report-slide border-t border-white/10 relative" data-screen-label="04.2 Reporte Financiero">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8">
+        <span class="ribbon">Reporte Financiero · 02 / 05</span>
+        <h2 class="font-display font-extrabold uppercase tracking-tight mt-8 text-5xl md:text-6xl leading-[.95]">
+          Financiero.
+        </h2>
+        <p class="mt-5 max-w-2xl text-white/70 text-lg leading-relaxed">Posición de fondos real: dónde está la plata, cuánto hay disponible y en qué se gastó. El mapa financiero del mes.</p>
+      </div>
+      <div class="md:col-span-4">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Posición de fondos · Mensual</div>
+        <div class="font-display font-extrabold uppercase tracking-tight text-xl text-white/85 mt-2 leading-tight">Sabé si tenés con qué pagar lo que viene y qué sobra para mover.</div>
+      </div>
+    </div>
+
+    <div class="mt-14 grid md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Qué contiene</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Saldos por banco y caja al cierre</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Billetera virtual y cuentas digitales</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Egresos clasificados por categoría</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Variación de fondos vs cierre anterior</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cobranzas por medio de pago</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Con qué decidís</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Si hay fondos para los próximos pagos</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cuánto se gastó y en qué</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>En qué banco concentrar disponibilidades</li>
+          
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Formato y entrega</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Archivo Excel con hoja de resumen</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Detalle de movimientos como anexo</li>
+          
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== REPORTE: PATRIMONIAL ========== -->
+<section id="reporte-pat" class="report-slide border-t border-white/10 relative" data-screen-label="04.3 Estado Patrimonial">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8">
+        <span class="ribbon">Estado Patrimonial · 03 / 05</span>
+        <h2 class="font-display font-extrabold uppercase tracking-tight mt-8 text-5xl md:text-6xl leading-[.95]">
+          Patrimonial.
+        </h2>
+        <p class="mt-5 max-w-2xl text-white/70 text-lg leading-relaxed">Fotografía del patrimonio al cierre del período: activos, pasivos y capital propio. La base para entender el tamaño real del negocio y su capacidad de endeudamiento.</p>
+      </div>
+      <div class="md:col-span-4">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Balance de situación · Mensual</div>
+        <div class="font-display font-extrabold uppercase tracking-tight text-xl text-white/85 mt-2 leading-tight">Cuánto vale el negocio y cuánto debe al cierre de cada período.</div>
+      </div>
+    </div>
+
+    <div class="mt-14 grid md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Qué contiene</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Activo corriente y no corriente</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Pasivo corriente y no corriente</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Patrimonio neto desagregado</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Comparativo entre dos períodos</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Variaciones relevantes explicadas</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Con qué decidís</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cuánto vale el negocio hoy</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Nivel real de endeudamiento</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Capacidad de repago y de crédito</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Solidez patrimonial ante bancos o inversores</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Formato y entrega</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Archivo Excel con columnas comparativas</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Notas explicativas de variaciones</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cierre al 10° día hábil de cada mes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== REPORTE: FLUJO DE FONDOS ========== -->
+<section id="reporte-flujo" class="report-slide border-t border-white/10 relative" data-screen-label="04.4 Flujo de Fondos">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8">
+        <span class="ribbon">Flujo de Fondos · 04 / 05</span>
+        <h2 class="font-display font-extrabold uppercase tracking-tight mt-8 text-5xl md:text-6xl leading-[.95]">
+          Flujo de<br/><span class="text-[var(--brand-2)]">fondos.</span>
+        </h2>
+        <p class="mt-5 max-w-2xl text-white/70 text-lg leading-relaxed">Registro del origen y destino del dinero durante el período. De dónde entró y en qué se aplicó. Imprescindible para proyectar y no quedarse sin caja.</p>
+      </div>
+      <div class="md:col-span-4">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Cash flow · Mensual</div>
+        <div class="font-display font-extrabold uppercase tracking-tight text-xl text-white/85 mt-2 leading-tight">Anticipá cuándo vas a necesitar fondos y cuándo tenés para mover.</div>
+      </div>
+    </div>
+
+    <div class="mt-14 grid md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Qué contiene</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Flujo operativo (cobros y pagos del giro)</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Flujo de inversión (bienes de uso)</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Flujo de financiación (préstamos, dividendos)</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Variación neta de disponibilidades</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Proyección de flujo a 30 y 60 días</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Con qué decidís</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Si la operación genera caja propia</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cuándo vas a necesitar financiamiento</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cuánto distribuir sin descapitalizar</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Plazos seguros para nuevas inversiones</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Formato y entrega</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Archivo Excel — método directo</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Proyección cargada como hoja adicional</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cierre al 7° día hábil de cada mes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== REPORTE: CENTRO DE COSTOS ========== -->
+<section id="reporte-costos" class="report-slide border-t border-white/10 relative" data-screen-label="04.5 Centro de Costos">
+  <div class="container-x">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8">
+        <span class="ribbon">Centro de Costos · 05 / 05</span>
+        <h2 class="font-display font-extrabold uppercase tracking-tight mt-8 text-5xl md:text-6xl leading-[.95]">
+          Centro de<br/><span class="text-[var(--brand-2)]">costos.</span>
+        </h2>
+        <p class="mt-5 max-w-2xl text-white/70 text-lg leading-relaxed">Rentabilidad desglosada por unidad de negocio: sucursal, producto, proyecto o canal. Cada centro medido por separado para saber cuál tira y cuál arrastra.</p>
+      </div>
+      <div class="md:col-span-4">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Análisis por unidad · Mensual</div>
+        <div class="font-display font-extrabold uppercase tracking-tight text-xl text-white/85 mt-2 leading-tight">Tomá decisiones sobre cada parte del negocio con números propios.</div>
+      </div>
+    </div>
+
+    <div class="mt-14 grid md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Qué contiene</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Ingresos y costos por centro asignados</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Margen de contribución por unidad</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Gastos directos vs indirectos</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Resultado neto por centro</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Ranking de rentabilidad operativa</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Con qué decidís</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cuál sucursal o línea es rentable</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Dónde concentrar el esfuerzo comercial</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cuál cerrar, escalar o renegociar</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cómo asignar recursos entre centros</li>
+        </ul>
+      </div>
+      <div class="pillar-cell p-8 bg-[var(--ink)] flex flex-col gap-5">
+        <div class="font-mono text-[10px] tracking-mega uppercase text-white/55">// Formato y entrega</div>
+        <ul class="space-y-3 text-white/70 text-[13px] mt-auto">
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Archivo Excel con hoja por cada centro</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Resumen ejecutivo en hoja inicial</li>
+          <li class="flex items-start gap-2"><span class="text-white/30 mt-px">→</span>Cierre al 7° día hábil de cada mes</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1244,26 +1657,64 @@
 <section id="stack" class="border-t border-white/10" data-screen-label="12 Stack">
   <div class="container-x">
     <div class="grid md:grid-cols-12 gap-10 items-end">
-      <div class="md:col-span-5 reveal">
+      <div class="md:col-span-7 reveal">
         <span class="ribbon">Stack / 12</span>
         <h2 class="font-display font-extrabold uppercase tracking-tight mt-8 text-4xl md:text-5xl leading-[1]">
           Operamos<br/>sobre tu stack.
         </h2>
         <p class="mt-5 text-white/70">Trabajamos directamente sobre los sistemas que ya usás, o te ayudamos a elegir e implementar el correcto.</p>
       </div>
-      <div class="md:col-span-7 reveal delay-1">
+      <div class="md:col-span-5 reveal delay-1 text-right">
         <div class="font-mono text-[10px] tracking-mega uppercase text-white/55 mb-2">// Integraciones activas</div>
-        <div class="font-display font-extrabold uppercase tracking-tight text-xl text-white/85 leading-tight">16 sistemas conectados · pasá el mouse para explorar</div>
+        <div class="font-display font-extrabold uppercase tracking-tight text-xl text-white/85 leading-tight">19 sistemas conectados</div>
+        <div class="text-white/60 text-sm mt-1">6 industrias · capa transversal IA</div>
       </div>
     </div>
-    <div class="reveal delay-2 mt-10 int-outer">
-      <div class="int-stage" id="int-stage">
-        <svg class="int-svg" id="int-svg"></svg>
-        <div class="int-hub">
-          <div class="int-hub-logo">CIAF</div>
-          <div class="int-hub-sub">Hub</div>
+    <!-- Leyenda de categorías -->
+    <div class="reveal delay-2 pcb-legend" id="pcb-legend">
+      <span class="pcb-legend-label">// Categorías</span>
+    </div>
+    <!-- Canvas PCB -->
+    <div class="reveal delay-3 pcb-outer">
+      <div class="pcb-canvas" id="pcb-canvas">
+        <div class="pcb-grid"></div>
+        <svg class="pcb-svg" viewBox="0 0 1500 1280" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <radialGradient id="pcbChipGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="rgba(245,166,35,0.45)"/>
+              <stop offset="60%"  stop-color="rgba(245,166,35,0.08)"/>
+              <stop offset="100%" stop-color="rgba(245,166,35,0)"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="750" cy="540" rx="420" ry="360" fill="url(#pcbChipGlow)"/>
+          <g id="pcb-traces"></g>
+        </svg>
+        <!-- Chip -->
+        <div class="pcb-chip">
+          <div class="pcb-chip-pins"></div>
+          <div class="pcb-chip-body">
+            <div class="pcb-chip-innergrid"></div>
+            <div class="pcb-chip-notch"></div>
+            <div class="pcb-chip-dots"><i></i><i></i></div>
+            <div class="pcb-chip-version">v.2026</div>
+            <div class="pcb-chip-center">
+              <div class="pcb-chip-title">CIAF</div>
+              <div class="pcb-chip-sub">HUB · INTEGRACIÓN</div>
+              <div class="pcb-chip-divider">
+                <div class="pcb-chip-tagline">Un cerebro para<br/>toda tu operación</div>
+              </div>
+            </div>
+            <div class="pcb-chip-serial">◆ CIAF-CORE / 19CH ◆</div>
+          </div>
         </div>
+        <!-- Pills generadas por JS -->
+        <div id="pcb-pills"></div>
       </div>
+    </div>
+    <!-- Status footer -->
+    <div class="reveal delay-4 pcb-status">
+      <div><span class="pcb-pulse"></span>UPLINK ONLINE <span style="opacity:.6;margin-left:8px">// 19 CANALES · DATA SYNC RT</span></div>
+      <div>CIAF.IO/STACK · 2026</div>
     </div>
   </div>
 </section>
@@ -1290,9 +1741,8 @@
     </div>
 
     <div class="mt-12 grid md:grid-cols-3 gap-8 text-white/70">
-      <p class="border-t border-white/10 pt-6"><span class="font-mono text-[10px] tracking-mega uppercase text-white/55 block mb-2">Trayectoria</span>+25 clientes activos en San Juan y la región, en industrias diversas.</p>
+      <p class="border-t border-white/10 pt-6"><span class="font-mono text-[10px] tracking-mega uppercase text-white/55 block mb-2">Trayectoria</span>+27 clientes activos en San Juan y la región, en industrias diversas.</p>
       <p class="border-t border-white/10 pt-6"><span class="font-mono text-[10px] tracking-mega uppercase text-white/55 block mb-2">Industrias</span>Gastronomía, retail, distribución, deporte, salud, servicios, turismo y más.</p>
-      <p class="border-t border-white/10 pt-6"><span class="font-mono text-[10px] tracking-mega uppercase text-white/55 block mb-2">Mantenemos</span>Cada logo conserva su identidad. Aplicamos un sistema neutro alrededor.</p>
     </div>
   </div>
 </section>
@@ -1446,24 +1896,26 @@ const CLIENTS = [
   {n:'Parador de Montaña',  c:'gastro', img:'imagenes_clientes/parque_parador_gastronomico.png'},
   {n:'Circo Bar & Grill',   c:'gastro', img:'imagenes_clientes/circo_beer_gastronomico.png'},
   {n:'Grupo Mauri',         c:'gastro', img:'imagenes_clientes/mauri_gastronomico.png'},
-  {n:'Bonafide',            c:'gastro', img:'imagenes_clientes/bonafide.png'},
   {n:'Buffet de Sociales',  c:'gastro', img:'imagenes_clientes/buffet_gastronomico.png'},
-  {n:'Las Invernadas',      c:'gastro', img:'imagenes_clientes/las_invernadas_gastronomico.png'},
-  {n:'Lorsani',             c:'gastro', img:'imagenes_clientes/lorsani_gastronomico.png'},
-  {n:'De Los Andes',        c:'otros',  img:'imagenes_clientes/de_los_andes.png'},
+  {n:'De Los Andes',        c:'otros',  img:'imagenes_clientes/de_los_andes.jpg'},
   {n:'El Almendro Sport',   c:'otros',  img:'imagenes_clientes/almendro.png'},
-  {n:'NuevoCuyo',           c:'otros',  img:'imagenes_clientes/nuevo_cuyo.png'},
-  {n:'Santa Clara',         c:'otros',  img:'imagenes_clientes/santa_clara.png'},
+  {n:'NuevoCuyo',           c:'otros',  img:'imagenes_clientes/nuevo_cuyo.jpg'},
+  {n:'Santa Clara',         c:'otros',  img:'imagenes_clientes/santa_clara.jpeg'},
   {n:'Óptica Lic',          c:'otros',  img:'imagenes_clientes/optica_lic.png'},
   {n:'Rustik Aventura',     c:'otros',  img:'imagenes_clientes/rustik.png'},
-  {n:'AXS',                 c:'otros',  img:'imagenes_clientes/axs.png'},
+  {n:'AXS',                 c:'otros',  img:'imagenes_clientes/axs.jpg'},
   {n:'FRAM Servicios',      c:'otros',  img:'imagenes_clientes/fram.png'},
   {n:'Ushuaia Aventura',    c:'otros',  img:'imagenes_clientes/usuaia.png'},
-  {n:'Asoc. de Nadadores',  c:'otros',  img:'imagenes_clientes/nadadores.png'},
+  {n:'Asoc. de Nadadores',  c:'otros',  img:'imagenes_clientes/nadadores.jpg'},
   {n:'Oeste San Juan',      c:'otros',  img:'imagenes_clientes/oeste.png'},
-  {n:'Enjoy RH',            c:'otros',  img:'imagenes_clientes/enjoy.png'},
   {n:'YPF Danpe',           c:'otros',  img:'imagenes_clientes/ypf_danpe.png'},
   {n:'Don Américo',         c:'otros',  img:'imagenes_clientes/don_americo.png'},
+  {n:'Algar',               c:'otros',  img:'imagenes_clientes/algar.png'},
+  {n:'Ansilta',             c:'otros',  img:'imagenes_clientes/ansilta_distribuciones.jfif'},
+  {n:'Itala',               c:'otros',  img:'imagenes_clientes/itala.jpg'},
+  {n:'Puntoi',              c:'otros',  img:'imagenes_clientes/puntoi.png'},
+  {n:'Cuatro Reinas',       c:'otros',  img:'imagenes_clientes/cuatro_reinas.png'},
+  {n:'Menin',               c:'otros',  img:'imagenes_clientes/menin.png'},
   {n:'CIAF · más',          c:'otros',  img:null},
 ];
 
@@ -1756,76 +2208,259 @@ if(fsBtn) fsBtn.addEventListener('click', ()=>{
   }); });
 })();
 
-/* ============= INTEGRATION MAP ============= */
+/* ============= PCB STACK ============= */
 (function(){
-  const INT_NODES = [
-    // LEFT — 5 items stacked vertically
-    {n:'Control Comercio', cat:'Comercio',        nc:'#4A9FE0', x:13, y:17},
-    {n:'AdministraNET',    cat:'Gestión',          nc:'#9B59B6', x:13, y:31},
-    {n:'PXSOL',           cat:'Hotelería',        nc:'#00B4D8', x:13, y:50},
-    {n:'Optix',           cat:'Ópticas',          nc:'#F4A261', x:13, y:69},
-    {n:'Toteat',          cat:'Restaurantes',     nc:'#27AE60', x:13, y:83},
-    // TOP — 3 items
-    {n:'Gestión Cervecera',cat:'Cervecera',       nc:'#D4A017', x:32, y:12},
-    {n:'Fudo',             cat:'Franquicias',     nc:'#2980B9', x:50, y:12},
-    {n:'Maxirest',         cat:'Gastronomía',     nc:'#E74C3C', x:68, y:12},
-    // RIGHT — 4 items stacked vertically
-    {n:'SGC',              cat:'Contabilidad',    nc:'#C0392B', x:87, y:17},
-    {n:'Contabilium',      cat:'Finanzas',        nc:'#2471A3', x:87, y:31},
-    {n:'Odoo',             cat:'ERP',             nc:'#714B67', x:87, y:50},
-    {n:'SOS Contador',     cat:'Contador',        nc:'#1A5276', x:87, y:69},
-    // BOTTOM — 4 items
-    {n:'Bistrosoft',       cat:'Restaurantes II', nc:'#1ABC9C', x:22, y:88},
-    {n:'Power BI',         cat:'BI / Reporting',  nc:'#F2C94C', x:38, y:88},
-    {n:'Looker Studio',    cat:'BI / Reporting',  nc:'#4285F4', x:59, y:88},
-    {n:'Dragonfish',       cat:'Moda',            nc:'#26C6DA', x:78, y:88},
+  var CATS = {
+    gastro:   { label:'Gastronomía',          color:'#F5A623', dim:'#7d5310' },
+    retail:   { label:'Retail & Comercio',    color:'#3DD6F5', dim:'#0f6479' },
+    hotel:    { label:'Hotelería',            color:'#3DE6B4', dim:'#0f6e56' },
+    erp:      { label:'ERP & Gestión',        color:'#A78BFA', dim:'#4e3d8f' },
+    finanzas: { label:'Contabilidad',         color:'#5EE3A0', dim:'#1f6e44' },
+    bi:       { label:'BI & Reporting',       color:'#FFD24D', dim:'#7d6310' },
+    ia:       { label:'IA · Transversal',     color:'#C2A2FB', dim:'#5a3fa8' },
+  };
+
+  var SYSTEMS = [
+    // Row 0 — arriba del chip
+    { row:0, col:0, name:'Gestión Cervecera', sub:'Cervecerías',    cat:'gastro',   logo:'gestion-cervecera.png' },
+    { row:0, col:1, name:'Fudo',              sub:'Franquicias',    cat:'gastro',   logo:'fudo.svg' },
+    { row:0, col:2, name:'Maxirest',          sub:'Gastronomía',    cat:'gastro',   logo:'maxirest.svg' },
+    { row:0, col:3, name:'Toteat',            sub:'Restaurantes',   cat:'gastro',   logo:'toteat.svg' },
+    // Row 1 — izq/der del chip (mitad superior)
+    { row:1, col:0, name:'Bistrosoft',        sub:'Restaurantes',   cat:'gastro',   logo:'bistrosoft.webp' },
+    { row:1, col:1, name:'Control Comercio',  sub:'Comercio',       cat:'retail',   logo:'control-comercio-dark.png', dark:true },
+    { row:1, col:2, name:'Dragonfish',        sub:'Moda',           cat:'retail',   logo:'dragonfish.png' },
+    { row:1, col:3, name:'Optix',             sub:'Ópticas',        cat:'retail',   logo:'optix.webp' },
+    // Row 2 — izq/der del chip (mitad inferior)
+    { row:2, col:0, name:'PxSol',             sub:'Hotelería',      cat:'hotel',    logo:'pxsol.svg' },
+    { row:2, col:1, name:'Odoo',              sub:'ERP',            cat:'erp',      logo:'odoo.png' },
+    { row:2, col:2, name:'Power BI',          sub:'BI / Reporting', cat:'bi',       logo:'powerbi.png' },
+    { row:2, col:3, name:'Looker Studio',     sub:'BI / Reporting', cat:'bi',       logo:'looker-studio.svg' },
+    // Row 3 — debajo del chip
+    { row:3, col:0, name:'AdministraNET',     sub:'Gestión',        cat:'erp',      logo:'administranet.svg', dark:true },
+    { row:3, col:1, name:'Contabilium',       sub:'Finanzas',       cat:'finanzas', logo:'contabilium.webp' },
+    { row:3, col:2, name:'SGC',               sub:'Contabilidad',   cat:'finanzas', logo:'sgc.png' },
+    { row:3, col:3, name:'SOS Contador',      sub:'Contador',       cat:'finanzas', logo:'sos-contador.png' },
+    // Row 4 — capa IA (posiciones cx propias, centradas bajo el chip)
+    { row:4, col:0, cx:400,  name:'Gemini',   sub:'IA Generativa',  cat:'ia',       logo:'gemini.png' },
+    { row:4, col:1, cx:750,  name:'Claude',   sub:'IA Asistente',   cat:'ia',       logo:'claude.png' },
+    { row:4, col:2, cx:1100, name:'OpenCode', sub:'IA Código',      cat:'ia',       logo:'opencode.svg', dark:true },
   ];
 
-  const stage = document.getElementById('int-stage');
-  if(!stage) return;
-  const svg = document.getElementById('int-svg');
-  svg.setAttribute('viewBox','0 0 100 100');
-  svg.setAttribute('preserveAspectRatio','none');
+  var W=1500, H=1280;
+  var CHIP_W=300, CHIP_H=320, CHIP_FRAME=14;
+  var CHIP_LEFT=600, CHIP_TOP=380, CHIP_RIGHT=900, CHIP_BOTTOM=700;
+  var PILL_H=64, PIN_N=7;
+  var ROW_Y=[110,320,760,970,1180];
+  var COL_X=[140,420,1080,1360];
+  var IA_PINS=[660,750,840];
 
-  INT_NODES.forEach(function(nd){
-    // SVG line from hub (50,50) to node
-    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1', 50); line.setAttribute('y1', 50);
-    line.setAttribute('x2', nd.x); line.setAttribute('y2', nd.y);
-    line.setAttribute('stroke','rgba(255,255,255,.1)');
-    line.setAttribute('stroke-width','0.6');
-    line.setAttribute('vector-effect','non-scaling-stroke');
-    svg.appendChild(line);
+  function pillWidth(name){ return Math.max(184,Math.min(308,82+name.length*10.8)); }
 
-    // Dot at node end of line
-    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('cx', nd.x); dot.setAttribute('cy', nd.y);
-    dot.setAttribute('r','0.8');
-    dot.setAttribute('fill','rgba(255,255,255,.2)');
-    dot.setAttribute('vector-effect','non-scaling-stroke');
-    svg.appendChild(dot);
+  function chipPin(row,col){
+    if(row===0) return {x:CHIP_LEFT+(col+0.5)/4*CHIP_W, y:CHIP_TOP,    side:'top'};
+    if(row===3) return {x:CHIP_LEFT+(col+0.5)/4*CHIP_W, y:CHIP_BOTTOM, side:'bottom'};
+    if(row===4) return {x:IA_PINS[col],                  y:CHIP_BOTTOM, side:'bottom'};
+    if(col<=1){ var idx=(row-1)*2+col;    return {x:CHIP_LEFT,  y:CHIP_TOP+(idx+0.5)/4*CHIP_H, side:'left'}; }
+    var idx2=(row-1)*2+(col-2);           return {x:CHIP_RIGHT, y:CHIP_TOP+(idx2+0.5)/4*CHIP_H, side:'right'};
+  }
 
-    // Node card
-    const node = document.createElement('div');
-    node.className = 'int-node';
-    node.style.cssText = 'left:'+nd.x+'%;top:'+nd.y+'%;--nc:'+nd.nc;
-    node.innerHTML = '<div class="int-card">'+nd.n+'</div><div class="int-cat">'+nd.cat+'</div>';
+  function pillExit(cx,cy,pw,pin){
+    if(pin.side==='top')    return {x:cx,        y:cy+PILL_H/2};
+    if(pin.side==='bottom') return {x:cx,        y:cy-PILL_H/2};
+    if(pin.side==='left')   return {x:cx+pw/2,   y:cy};
+    return                         {x:cx-pw/2,   y:cy};
+  }
 
-    node.addEventListener('mouseenter', function(){
-      line.setAttribute('stroke', nd.nc);
-      line.setAttribute('stroke-width','1.5');
-      dot.setAttribute('fill', nd.nc);
-      dot.setAttribute('r','1.2');
+  function buildPath(exit,pin,col){
+    var ex=exit.x, ey=exit.y, px=pin.x, py=pin.y, side=pin.side;
+    if(side==='top'){
+      var ry=ey+36+col*14;
+      return {d:'M '+ex+' '+ey+' L '+ex+' '+ry+' L '+px+' '+ry+' L '+px+' '+py,
+              bends:[{x:ex,y:ry},{x:px,y:ry}]};
+    }
+    if(side==='bottom'){
+      var ry2=ey-36-col*14;
+      return {d:'M '+ex+' '+ey+' L '+ex+' '+ry2+' L '+px+' '+ry2+' L '+px+' '+py,
+              bends:[{x:ex,y:ry2},{x:px,y:ry2}]};
+    }
+    if(side==='left'){
+      var gap=Math.abs(ex-px);
+      var rx=Math.min(ex+Math.max(34,gap*0.4)+col*14, CHIP_LEFT-28);
+      return {d:'M '+ex+' '+ey+' L '+rx+' '+ey+' L '+rx+' '+py+' L '+px+' '+py,
+              bends:[{x:rx,y:ey},{x:rx,y:py}]};
+    }
+    var gap2=Math.abs(ex-px);
+    var rx2=Math.max(ex-Math.max(34,gap2*0.4)-(col-2)*14, CHIP_RIGHT+28);
+    return {d:'M '+ex+' '+ey+' L '+rx2+' '+ey+' L '+rx2+' '+py+' L '+px+' '+py,
+            bends:[{x:rx2,y:ey},{x:rx2,y:py}]};
+  }
+
+  var canvas  = document.getElementById('pcb-canvas');
+  var traceG  = document.getElementById('pcb-traces');
+  var pillsEl = document.getElementById('pcb-pills');
+  var legendEl= document.getElementById('pcb-legend');
+  var outer   = document.querySelector('.pcb-outer');
+  if(!canvas) return;
+
+  function updateScale(){
+    if(!outer) return;
+    var scale = outer.clientWidth / W;
+    canvas.style.transform = 'scale('+scale+')';
+    outer.style.height = (H*scale)+'px';
+  }
+  window.addEventListener('resize', updateScale);
+
+  // Chip pins
+  var pinsEl = canvas.querySelector('.pcb-chip-pins');
+  if(pinsEl){
+    ['top','bottom','left','right'].forEach(function(side){
+      for(var i=0;i<PIN_N;i++){
+        var t=(i+0.5)/PIN_N;
+        var isVert=side==='top'||side==='bottom';
+        var pw=isVert?6:14, ph=isVert?14:6;
+        var pl,pt;
+        if(side==='top')         { pl=CHIP_FRAME+t*(CHIP_W-2*CHIP_FRAME)-pw/2; pt=0; }
+        else if(side==='bottom') { pl=CHIP_FRAME+t*(CHIP_W-2*CHIP_FRAME)-pw/2; pt=CHIP_H-ph; }
+        else if(side==='left')   { pl=0; pt=CHIP_FRAME+t*(CHIP_H-2*CHIP_FRAME)-ph/2; }
+        else                     { pl=CHIP_W-pw; pt=CHIP_FRAME+t*(CHIP_H-2*CHIP_FRAME)-ph/2; }
+        var pin=document.createElement('div');
+        pin.className='pcb-pin';
+        pin.style.cssText='left:'+pl+'px;top:'+pt+'px;width:'+pw+'px;height:'+ph+'px';
+        pinsEl.appendChild(pin);
+      }
     });
-    node.addEventListener('mouseleave', function(){
-      line.setAttribute('stroke','rgba(255,255,255,.1)');
-      line.setAttribute('stroke-width','0.6');
-      dot.setAttribute('fill','rgba(255,255,255,.2)');
-      dot.setAttribute('r','0.8');
-    });
+  }
 
-    stage.appendChild(node);
+  // Legend buttons
+  Object.keys(CATS).forEach(function(key){
+    var cat=CATS[key];
+    var btn=document.createElement('button');
+    btn.className='pcb-cat-pill';
+    btn.dataset.cat=key;
+    btn.style.setProperty('--cat-color',cat.color);
+    btn.innerHTML='<span class="dot"></span>'+cat.label;
+    btn.addEventListener('mouseenter',function(){ filterByCat(key); });
+    btn.addEventListener('mouseleave',function(){ filterByCat(null); });
+    legendEl.appendChild(btn);
   });
+
+  var pillEls={}, traceEls={};
+
+  // SVG namespace helper
+  var SVG_NS='http://www.w3.org/2000/svg';
+  function svgEl(tag){ return document.createElementNS(SVG_NS,tag); }
+
+  SYSTEMS.forEach(function(sys,i){
+    var cat=CATS[sys.cat];
+    var cx=sys.cx!==undefined ? sys.cx : COL_X[sys.col];
+    var cy=ROW_Y[sys.row];
+    var pw=pillWidth(sys.name);
+    var pin=chipPin(sys.row,sys.col);
+    var exit=pillExit(cx,cy,pw,pin);
+    var path=buildPath(exit,pin,sys.col);
+    var delay=(sys.row*4+sys.col)*0.45;
+    var pulseDelay=(sys.row+sys.col)*0.4;
+
+    // Trace path
+    var traceEl=svgEl('path');
+    traceEl.setAttribute('d',path.d);
+    traceEl.setAttribute('stroke',cat.color);
+    traceEl.setAttribute('stroke-width','1.1');
+    traceEl.setAttribute('stroke-opacity','0.32');
+    traceEl.setAttribute('stroke-linecap','round');
+    traceEl.setAttribute('stroke-linejoin','round');
+    traceEl.setAttribute('fill','none');
+    traceEl.style.animation='pcb-pulse-trace 2.4s '+pulseDelay+'s infinite';
+    traceG.appendChild(traceEl);
+    traceEls[sys.name]=traceEl;
+
+    // Exit via (hollow ring)
+    var vE=svgEl('circle');
+    vE.setAttribute('cx',exit.x); vE.setAttribute('cy',exit.y);
+    vE.setAttribute('r','3.5'); vE.setAttribute('fill','#07101f');
+    vE.setAttribute('stroke',cat.color); vE.setAttribute('stroke-width','1.2');
+    traceG.appendChild(vE);
+
+    // Pin via (filled)
+    var vP=svgEl('circle');
+    vP.setAttribute('cx',pin.x); vP.setAttribute('cy',pin.y);
+    vP.setAttribute('r','3'); vP.setAttribute('fill',cat.color);
+    traceG.appendChild(vP);
+
+    // Bend vias
+    path.bends.forEach(function(b){
+      var vB=svgEl('circle');
+      vB.setAttribute('cx',b.x); vB.setAttribute('cy',b.y);
+      vB.setAttribute('r','1.5'); vB.setAttribute('fill',cat.color);
+      vB.setAttribute('opacity','0.35');
+      traceG.appendChild(vB);
+    });
+
+    // Animated packet
+    var pkt=svgEl('circle');
+    pkt.setAttribute('r','3'); pkt.setAttribute('fill',cat.color);
+    var am=svgEl('animateMotion');
+    am.setAttribute('dur','3.6s'); am.setAttribute('begin',delay+'s');
+    am.setAttribute('repeatCount','indefinite'); am.setAttribute('path',path.d);
+    am.setAttribute('rotate','auto');
+    var ao=svgEl('animate');
+    ao.setAttribute('attributeName','opacity'); ao.setAttribute('dur','3.6s');
+    ao.setAttribute('begin',delay+'s'); ao.setAttribute('repeatCount','indefinite');
+    ao.setAttribute('values','0;0;1;1;0;0'); ao.setAttribute('keyTimes','0;0.05;0.1;0.9;0.95;1');
+    pkt.appendChild(am); pkt.appendChild(ao);
+    traceG.appendChild(pkt);
+
+    // Pill
+    var pill=document.createElement('div');
+    pill.className='pcb-pill';
+    pill.dataset.cat=sys.cat;
+    pill.style.cssText='left:'+cx+'px;top:'+cy+'px;width:'+pw+'px;--cat-color:'+cat.color+';--cat-dim:'+cat.dim;
+    var markCls='pcb-pill-mark'+(sys.dark?' is-dark':'');
+    var fb=sys.name.slice(0,2).toUpperCase();
+    pill.innerHTML=
+      '<div class="'+markCls+'">'+
+        '<img class="pcb-pill-logo" src="integraciones/'+sys.logo+'" alt="'+sys.name+'" loading="lazy"'+
+        ' onerror="this.outerHTML=\'<span style=&quot;font:800 12px Montserrat;color:#0a1628&quot;>'+fb+'</span>\'">'+
+      '</div>'+
+      '<div class="pcb-pill-text">'+
+        '<div class="pcb-pill-name">'+sys.name+'</div>'+
+        '<div class="pcb-pill-sub">'+sys.sub+'</div>'+
+      '</div>';
+
+    (function(tr,pl,pd){ // capture closure vars
+      pill.addEventListener('mouseenter',function(){
+        tr.setAttribute('stroke-opacity','0.9'); tr.setAttribute('stroke-width','1.6');
+        tr.style.animation='none';
+      });
+      pill.addEventListener('mouseleave',function(){
+        if(!pl.classList.contains('is-dim')){
+          tr.setAttribute('stroke-opacity','0.32'); tr.setAttribute('stroke-width','1.1');
+          tr.style.animation='pcb-pulse-trace 2.4s '+pd+'s infinite';
+        }
+      });
+    })(traceEl, pill, pulseDelay);
+
+    pillsEl.appendChild(pill);
+    pillEls[sys.name]=pill;
+  });
+
+  function filterByCat(cat){
+    SYSTEMS.forEach(function(sys){
+      var p=pillEls[sys.name], tr=traceEls[sys.name];
+      if(!p||!tr) return;
+      var active=(cat===null||sys.cat===cat);
+      if(active){
+        p.classList.remove('is-dim');
+        tr.setAttribute('stroke-opacity','0.32'); tr.setAttribute('stroke-width','1.1');
+      } else {
+        p.classList.add('is-dim');
+        tr.setAttribute('stroke-opacity','0.06'); tr.setAttribute('stroke-width','0.7');
+      }
+    });
+  }
+
+  updateScale();
 })();
 
 /* ============= ICONS ============= */

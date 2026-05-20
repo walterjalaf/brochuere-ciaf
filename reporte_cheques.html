@@ -6,11 +6,12 @@
 <title>Dashboard de Cheques</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
     --orange: #F26522;
+    --accent: #F26522;
     --orange-600: #E5571A;
     --orange-100: #FFF0E6;
     --orange-50: #FFF8F3;
@@ -21,25 +22,37 @@
     --yellow: #D97706;
     --blue: #2563EB;
     --purple: #7C3AED;
-    --ink: #0F172A;
+    --ink: #0E1F33;
+    --brand: #1E4A82;
+    --brand-2: #2D6CB8;
+    --pearl: #E8EAEC;
+    --paper: #F5F6F8;
+    --soft: #1A1A1A;
     --ink-2: #334155;
     --muted: #64748B;
     --muted-2: #94A3B8;
     --line: #E2E8F0;
     --line-soft: #F1F5F9;
-    --bg: #F8FAFC;
-    --bg-card: #FFFFFF;
-    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
-    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
-    --shadow-lg: 0 12px 32px rgba(242, 101, 34, 0.18), 0 2px 6px rgba(15, 23, 42, 0.06);
+    --card: #ffffff;
+    --shadow-sm: 0 1px 2px rgba(14, 31, 51, 0.04);
+    --shadow-md: 0 4px 12px rgba(14, 31, 51, 0.06), 0 1px 2px rgba(14, 31, 51, 0.04);
+    --shadow-lg: 0 12px 32px rgba(30, 74, 130, 0.18), 0 2px 6px rgba(14, 31, 51, 0.06);
+    --ciaf-page-w:1180px;
+    --ciaf-radius:14px;
+    --ciaf-radius-sm:10px;
+    --ciaf-pad:28px;
+    --ciaf-gap:16px;
+    --ciaf-shadow:0 1px 2px rgba(14,31,51,.05), 0 4px 16px -8px rgba(14,31,51,.12);
+    --ciaf-shadow-sm:0 1px 2px rgba(14,31,51,.05);
+    --ciaf-line:#e6eaf2;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
-    background: var(--bg);
+    background: var(--paper);
     color: var(--ink);
-    font-family: 'Manrope', system-ui, sans-serif;
+    font-family: 'Open Sans', system-ui, sans-serif;
     font-size: 14px;
     line-height: 1.45;
     -webkit-font-smoothing: antialiased;
@@ -48,15 +61,15 @@
   .num { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
 
   .dashboard {
-    max-width: 1120px;
+    max-width: var(--ciaf-page-w);
     margin: 0 auto;
-    background: var(--bg-card);
+    background: var(--card);
     box-shadow: 0 0 0 1px var(--line);
   }
 
   /* HEADER */
   .header {
-    background: linear-gradient(120deg, var(--orange) 0%, #F58A4F 100%);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
     color: white;
     padding: 22px 32px;
     display: flex;
@@ -97,8 +110,8 @@
     align-items: center;
     gap: 10px;
     padding: 10px 32px;
-    background: var(--orange-50);
-    border-bottom: 1px solid var(--orange-100);
+    background: #EEF3FB;
+    border-bottom: 1px solid #D7E3F2;
     font-size: 12px;
     color: var(--ink-2);
   }
@@ -108,8 +121,8 @@
     align-items: center;
     gap: 6px;
     background: white;
-    border: 1px solid var(--orange-100);
-    color: var(--orange-600);
+    border: 1px solid #D7E3F2;
+    color: var(--brand);
     padding: 4px 10px;
     border-radius: 999px;
     font-weight: 600;
@@ -181,12 +194,12 @@
   }
   .availability-table tbody td:nth-child(n+2) { text-align: right; }
   .availability-table tbody tr { transition: background 0.12s; }
-  .availability-table tbody tr:hover { background: var(--bg); }
+  .availability-table tbody tr:hover { background: var(--paper); }
   .availability-table tbody tr:last-child td {
     border-bottom: none;
     font-weight: 700;
     color: var(--ink);
-    background: var(--bg);
+    background: var(--paper);
   }
   .neg { color: var(--red); }
 
@@ -199,10 +212,11 @@
 
   /* PERIOD CARDS */
   .period-card {
-    border: 1px solid var(--line);
-    border-radius: 10px;
+    border: 1px solid var(--ciaf-line);
+    border-radius: var(--ciaf-radius);
     padding: 16px 18px;
     background: white;
+    box-shadow: var(--ciaf-shadow);
     cursor: pointer;
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.2s ease;
     position: relative;
@@ -263,10 +277,11 @@
 
   /* STATUS CARDS */
   .status-card {
-    border: 1px solid var(--line);
-    border-radius: 10px;
+    border: 1px solid var(--ciaf-line);
+    border-radius: var(--ciaf-radius);
     padding: 14px 18px 16px;
     background: white;
+    box-shadow: var(--ciaf-shadow);
     cursor: pointer;
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     position: relative;
@@ -321,7 +336,7 @@
   .chart-header h3 { font-size: 14px; font-weight: 700; color: var(--ink); }
   .chart-header .chart-subtitle { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
   .chart-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-  .chart-meta .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+  .chart-meta .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand-2); }
   .chart-container { position: relative; height: 280px; width: 100%; }
   .chart-container.bar { height: 300px; }
 
@@ -337,13 +352,13 @@
   .ready-header h3 {
     font-size: 14px;
     font-weight: 700;
-    color: var(--orange);
+    color: var(--brand);
     display: flex; align-items: center; gap: 8px;
   }
   .ready-header h3::before {
     content: "";
     width: 3px; height: 16px;
-    background: var(--orange);
+    background: var(--brand);
     border-radius: 2px;
   }
   .ready-header .subtitle { font-size: 11px; color: var(--muted); margin-top: 4px; padding-left: 11px; }
@@ -365,7 +380,7 @@
     border: 1px solid var(--line);
   }
   .ready-table thead th {
-    background: var(--orange-50);
+    background: var(--pearl);
     color: var(--ink-2);
     font-weight: 700;
     text-align: left;
@@ -373,7 +388,7 @@
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    border-bottom: 1px solid var(--orange-100);
+    border-bottom: 1px solid var(--ciaf-line);
   }
   .ready-table thead th.num-col { text-align: right; }
   .ready-table tbody td {
@@ -394,7 +409,7 @@
   .ready-table tbody tr {
     transition: background 0.12s;
   }
-  .ready-table tbody tr:hover { background: var(--orange-50); }
+  .ready-table tbody tr:hover { background: #F2F6FB; }
   .ready-table tbody tr:last-child td { border-bottom: none; }
 
   /* ANIMATIONS */
@@ -420,20 +435,44 @@
     .ready-table { font-size: 11px; }
     .ready-table thead th, .ready-table tbody td { padding: 7px 8px; }
   }
+
+  .ciaf-brandbar{background:var(--ink);border-bottom:2px solid var(--accent);}
+  .ciaf-brandbar-inner{max-width:var(--ciaf-page-w);margin:0 auto;padding:16px var(--ciaf-pad);display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .ciaf-logo{height:44px;width:auto;opacity:.95;display:block;}
+  .ciaf-brandbar-meta{text-align:right;}
+  .ciaf-report-name{font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;letter-spacing:-.01em;color:#fff;}
+  .ciaf-report-period{font-family:'Open Sans',sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:3px;}
+  @media (max-width:600px){.ciaf-brandbar-inner{padding:12px 16px;}.ciaf-logo{height:34px;}.ciaf-report-name{font-size:13px;}}
+  @media print{.ciaf-brandbar{background:var(--ink)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+
+  .ciaf-footer{border-top:1px solid var(--ciaf-line);margin-top:40px;background:#fff;}
+  .ciaf-footer-inner{max-width:var(--ciaf-page-w);margin:0 auto;padding:18px var(--ciaf-pad);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .ciaf-footer-brand{font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;color:var(--ink);letter-spacing:.04em;}
+  .ciaf-footer-note{font-size:11px;color:#94a3b8;letter-spacing:.04em;}
+  @media print{.ciaf-footer{display:none;}}
 </style>
 </head>
 <body>
+<header class="ciaf-brandbar">
+  <div class="ciaf-brandbar-inner">
+    <img class="ciaf-logo" src="logo_grande.png" alt="CIAF Consultora Integral" />
+    <div class="ciaf-brandbar-meta">
+      <div class="ciaf-report-name">Dashboard de Cheques</div>
+      <div class="ciaf-report-period">Vencimientos · Período actual</div>
+    </div>
+  </div>
+</header>
 <div class="dashboard">
 
   <!-- HEADER -->
   <div class="header">
     <div class="header-block">
       <div class="label">Total Echeq a Pagar</div>
-      <div class="value num">$ 113.976.440,30</div>
+      <div class="value num">$ 67.447.806,81</div>
     </div>
     <div class="header-block header-right">
       <div class="label">Cheques a Pagar</div>
-      <div class="value num">41</div>
+      <div class="value num">22</div>
     </div>
   </div>
 
@@ -452,10 +491,10 @@
         <tr><th>Entidad</th><th>Saldo</th><th>Acuerdo</th><th>Disponible</th></tr>
       </thead>
       <tbody>
-        <tr><td>ICBC</td><td class="num neg">-$97.117.023,00</td><td class="num">$0,00</td><td class="num neg">-$97.117.023,00</td></tr>
-        <tr><td>BBVA</td><td class="num">$10.916,00</td><td class="num">$0,00</td><td class="num">$10.916,00</td></tr>
-        <tr><td>EFECTIVO</td><td class="num neg">-$972.162,00</td><td class="num">$0,00</td><td class="num neg">-$972.162,00</td></tr>
-        <tr><td>TOTAL</td><td class="num neg">-$98.078.269,00</td><td class="num">$0,00</td><td class="num neg">-$98.078.269,00</td></tr>
+        <tr><td>ICBC</td><td class="num pos">$185.420.500,00</td><td class="num">$50.000.000,00</td><td class="num pos">$235.420.500,00</td></tr>
+        <tr><td>BBVA</td><td class="num pos">$42.380.916,00</td><td class="num">$25.000.000,00</td><td class="num pos">$67.380.916,00</td></tr>
+        <tr><td>EFECTIVO</td><td class="num pos">$8.450.000,00</td><td class="num">$0,00</td><td class="num pos">$8.450.000,00</td></tr>
+        <tr><td>TOTAL</td><td class="num pos">$236.251.416,00</td><td class="num">$75.000.000,00</td><td class="num pos">$311.251.416,00</td></tr>
       </tbody>
     </table>
   </div>
@@ -472,23 +511,23 @@
     <div class="grid-2">
       <div class="status-card" style="--accent: var(--green); --accent-bg: var(--green-bg);">
         <div class="sc-label">Pagados</div>
-        <div class="sc-amount num">$ 336.130.235,72</div>
-        <div class="sc-count">122 cheques</div>
+        <div class="sc-amount num">$ 168.065.117,86</div>
+        <div class="sc-count">61 cheques</div>
       </div>
       <div class="status-card" style="--accent: var(--orange); --accent-bg: var(--orange-50);">
         <div class="sc-label">A Pagar</div>
-        <div class="sc-amount num">$ 113.976.440,30</div>
-        <div class="sc-count">41 cheques</div>
+        <div class="sc-amount num">$ 67.447.806,81</div>
+        <div class="sc-count">22 cheques</div>
       </div>
       <div class="status-card" style="--accent: var(--red); --accent-bg: var(--red-bg);">
         <div class="sc-label">Rechazados</div>
-        <div class="sc-amount num">$ 58.236.699,04</div>
-        <div class="sc-count">20 cheques</div>
+        <div class="sc-amount num">$ 29.118.349,52</div>
+        <div class="sc-count">10 cheques</div>
       </div>
       <div class="status-card" style="--accent: var(--purple); --accent-bg: #F5F3FF;">
         <div class="sc-label">Vencidos</div>
-        <div class="sc-amount num">$ 4.690.063,27</div>
-        <div class="sc-count">2 cheques</div>
+        <div class="sc-amount num">$ 2.345.031,64</div>
+        <div class="sc-count">1 cheque</div>
       </div>
     </div>
   </div>
@@ -515,8 +554,8 @@
         <div class="subtitle" id="readySubtitle">Cheques que vencen hoy o ya vencieron (dentro de los 30 días)</div>
       </div>
       <div class="total-info">
-        <div class="total-label" id="readyCount">Total 8 cheques</div>
-        <div class="total-amount num" id="readyAmount">$ 28.405.310,45</div>
+        <div class="total-label" id="readyCount">Total 4 cheques</div>
+        <div class="total-amount num" id="readyAmount">$ 15.089.318,82</div>
       </div>
     </div>
     <table class="ready-table">
@@ -545,70 +584,58 @@
 
 </div>
 
+<footer class="ciaf-footer">
+  <div class="ciaf-footer-inner">
+    <span class="ciaf-footer-brand">CIAF · Consultora Integral</span>
+    <span class="ciaf-footer-note">Reporte generado para uso interno · Datos de muestra</span>
+  </div>
+</footer>
+
 <script>
   /* DATASET */
   const BUCKETS = {
-    'hoy':   { label: 'Hoy',       color: '#F26522', bg: '#FFF0E6', count: 8,  total: 28405310.45 },
-    '7d':    { label: 'A 7 días',  color: '#D97706', bg: '#FEF3C7', count: 5,  total: 15431789.32 },
-    '7-15':  { label: '7 a 15d',   color: '#2563EB', bg: '#DBEAFE', count: 4,  total: 12983182.18 },
-    '15-30': { label: '15 a 30d',  color: '#2563EB', bg: '#DBEAFE', count: 9,  total: 24228685.23 },
-    '31-60': { label: '31 a 60d',  color: '#7C3AED', bg: '#EDE9FE', count: 10, total: 24849089.53 },
-    '60+':   { label: '> 60 días', color: '#64748B', bg: '#F1F5F9', count: 5,  total: 8078383.59  }
+    'hoy':   { label: 'Hoy',       color: '#F26522', bg: '#FFF0E6', count: 4, total: 15089318.82 },
+    '7d':    { label: 'A 7 días',  color: '#D97706', bg: '#FEF3C7', count: 3, total: 9549979.89  },
+    '7-15':  { label: '7 a 15d',   color: '#2563EB', bg: '#DBEAFE', count: 2, total: 7942069.00  },
+    '15-30': { label: '15 a 30d',  color: '#2563EB', bg: '#DBEAFE', count: 5, total: 16329479.57 },
+    '31-60': { label: '31 a 60d',  color: '#7C3AED', bg: '#EDE9FE', count: 5, total: 13329548.96 },
+    '60+':   { label: '> 60 días', color: '#64748B', bg: '#F1F5F9', count: 3, total: 5207410.57  }
   };
 
   const cheques = [
-    // HOY (8)
+    // HOY (4)
     { nro: '106553910', proveedor: 'ICARDI',      banco: 'BANCO ICBC', fPago: '5/4/2026',  monto: 3692069.00, dias: 22, bucket: 'hoy' },
     { nro: '106553911', proveedor: 'ICARDI',      banco: 'BANCO ICBC', fPago: '12/4/2026', monto: 3692069.00, dias: 15, bucket: 'hoy' },
     { nro: '—',         proveedor: 'ALYSER',      banco: '—',          fPago: '12/4/2026', monto: 1737410.57, dias: 15, bucket: 'hoy' },
     { nro: '12353444',  proveedor: 'GOLDSTEIN',   banco: '—',          fPago: '16/4/2026', monto: 5968770.25, dias: 11, bucket: 'hoy' },
-    { nro: '13081531',  proveedor: 'LUCACEN SRL', banco: 'BANCO ICBC', fPago: '16/4/2026', monto: 4193443.06, dias: 11, bucket: 'hoy' },
-    { nro: '106553912', proveedor: 'ICARDI',      banco: 'BANCO ICBC', fPago: '19/4/2026', monto: 3692069.00, dias: 8,  bucket: 'hoy' },
-    { nro: '13081559',  proveedor: 'ALYSER',      banco: '—',          fPago: '19/4/2026', monto: 1737410.57, dias: 8,  bucket: 'hoy' },
-    { nro: '106553913', proveedor: 'ICARDI',      banco: 'BANCO ICBC', fPago: '26/4/2026', monto: 3692069.00, dias: 1,  bucket: 'hoy' },
 
-    // 7d (5)
+    // 7d (3)
     { nro: '106553914', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '02/5/2026', monto: 3692069.00, dias: -3, bucket: '7d' },
     { nro: '20451223',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '03/5/2026', monto: 4120500.32, dias: -4, bucket: '7d' },
     { nro: '13081572',  proveedor: 'ALYSER',      banco: '—',              fPago: '04/5/2026', monto: 1737410.57, dias: -5, bucket: '7d' },
-    { nro: '88712044',  proveedor: 'MENIN HNOS',  banco: 'BANCO BBVA',     fPago: '05/5/2026', monto: 2890000.00, dias: -6, bucket: '7d' },
-    { nro: '20451224',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '06/5/2026', monto: 2991809.43, dias: -7, bucket: '7d' },
 
-    // 7-15 (4)
+    // 7-15 (2)
     { nro: '106553915', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '09/5/2026', monto: 3692069.00, dias: -10, bucket: '7-15' },
     { nro: '45120033',  proveedor: 'PALADINI SA', banco: 'BANCO SANTANDER',fPago: '11/5/2026', monto: 4250000.00, dias: -12, bucket: '7-15' },
-    { nro: '13081598',  proveedor: 'ALYSER',      banco: '—',              fPago: '13/5/2026', monto: 1737410.57, dias: -14, bucket: '7-15' },
-    { nro: '99001245',  proveedor: 'MOLINOS RIO', banco: 'BANCO MACRO',    fPago: '14/5/2026', monto: 3303702.61, dias: -15, bucket: '7-15' },
 
-    // 15-30 (9)
+    // 15-30 (5)
     { nro: '106553916', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '16/5/2026', monto: 3692069.00, dias: -17, bucket: '15-30' },
     { nro: '20451225',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '18/5/2026', monto: 2890000.00, dias: -19, bucket: '15-30' },
     { nro: '78451200',  proveedor: 'COCA COLA SA',banco: 'BANCO BBVA',     fPago: '19/5/2026', monto: 5120000.00, dias: -20, bucket: '15-30' },
     { nro: '13081612',  proveedor: 'ALYSER',      banco: '—',              fPago: '20/5/2026', monto: 1737410.57, dias: -21, bucket: '15-30' },
     { nro: '88712065',  proveedor: 'MENIN HNOS',  banco: 'BANCO BBVA',     fPago: '21/5/2026', monto: 2890000.00, dias: -22, bucket: '15-30' },
-    { nro: '99001260',  proveedor: 'MOLINOS RIO', banco: 'BANCO MACRO',    fPago: '23/5/2026', monto: 1850000.00, dias: -24, bucket: '15-30' },
-    { nro: '12353489',  proveedor: 'GOLDSTEIN',   banco: '—',              fPago: '25/5/2026', monto: 2120000.00, dias: -26, bucket: '15-30' },
-    { nro: '20451226',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '27/5/2026', monto: 1840000.00, dias: -28, bucket: '15-30' },
-    { nro: '45120057',  proveedor: 'PALADINI SA', banco: 'BANCO SANTANDER',fPago: '28/5/2026', monto: 2089205.66, dias: -29, bucket: '15-30' },
 
-    // 31-60 (10)
+    // 31-60 (5)
     { nro: '106553917', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '02/6/2026', monto: 3692069.00, dias: -34, bucket: '31-60' },
     { nro: '13081645',  proveedor: 'ALYSER',      banco: '—',              fPago: '06/6/2026', monto: 1737410.57, dias: -38, bucket: '31-60' },
     { nro: '88712098',  proveedor: 'MENIN HNOS',  banco: 'BANCO BBVA',     fPago: '10/6/2026', monto: 2890000.00, dias: -42, bucket: '31-60' },
     { nro: '99001288',  proveedor: 'MOLINOS RIO', banco: 'BANCO MACRO',    fPago: '13/6/2026', monto: 2120000.00, dias: -45, bucket: '31-60' },
-    { nro: '20451227',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '15/6/2026', monto: 2890000.00, dias: -47, bucket: '31-60' },
-    { nro: '45120089',  proveedor: 'PALADINI SA', banco: 'BANCO SANTANDER',fPago: '18/6/2026', monto: 2750000.00, dias: -50, bucket: '31-60' },
-    { nro: '78451233',  proveedor: 'COCA COLA SA',banco: 'BANCO BBVA',     fPago: '20/6/2026', monto: 2890000.00, dias: -52, bucket: '31-60' },
-    { nro: '12353501',  proveedor: 'GOLDSTEIN',   banco: '—',              fPago: '23/6/2026', monto: 1850000.00, dias: -55, bucket: '31-60' },
-    { nro: '13081678',  proveedor: 'ALYSER',      banco: '—',              fPago: '26/6/2026', monto: 1737410.57, dias: -58, bucket: '31-60' },
-    { nro: '99001305',  proveedor: 'MOLINOS RIO', banco: 'BANCO MACRO',    fPago: '28/6/2026', monto: 2292199.39, dias: -60, bucket: '31-60' },
+    { nro: '20451227',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '15/6/2026', monto: 2890000.39, dias: -47, bucket: '31-60' },
 
-    // 60+ (5)
+    // 60+ (3)
     { nro: '106553918', proveedor: 'ICARDI',      banco: 'BANCO ICBC',     fPago: '02/7/2026', monto: 1850000.00, dias: -64, bucket: '60+' },
     { nro: '88712111',  proveedor: 'MENIN HNOS',  banco: 'BANCO BBVA',     fPago: '08/7/2026', monto: 1620000.00, dias: -70, bucket: '60+' },
-    { nro: '13081699',  proveedor: 'ALYSER',      banco: '—',              fPago: '15/7/2026', monto: 1737410.57, dias: -77, bucket: '60+' },
-    { nro: '20451228',  proveedor: 'DANPE SA',    banco: 'BANCO GALICIA',  fPago: '20/7/2026', monto: 1450000.00, dias: -82, bucket: '60+' },
-    { nro: '45120120',  proveedor: 'PALADINI SA', banco: 'BANCO SANTANDER',fPago: '28/7/2026', monto: 1420973.02, dias: -90, bucket: '60+' }
+    { nro: '13081699',  proveedor: 'ALYSER',      banco: '—',              fPago: '15/7/2026', monto: 1737410.57, dias: -77, bucket: '60+' }
   ];
 
   /* STATE */
@@ -774,8 +801,8 @@
   function initLineChart() {
     const ctx = document.getElementById('lineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 280);
-    gradient.addColorStop(0, 'rgba(242, 101, 34, 0.32)');
-    gradient.addColorStop(1, 'rgba(242, 101, 34, 0.02)');
+    gradient.addColorStop(0, 'rgba(45, 108, 184, 0.32)');
+    gradient.addColorStop(1, 'rgba(45, 108, 184, 0.02)');
 
     lineChart = new Chart(ctx, {
       type: 'line',
@@ -783,12 +810,12 @@
         labels: lineLabels,
         datasets: [{
           data: lineData,
-          borderColor: '#F26522',
+          borderColor: '#2D6CB8',
           backgroundColor: gradient,
           fill: true,
           tension: 0.45,
           borderWidth: 2.5,
-          pointBackgroundColor: '#F26522',
+          pointBackgroundColor: '#2D6CB8',
           pointBorderColor: '#fff',
           pointBorderWidth: 1.5,
           pointRadius: 3.5,
@@ -803,11 +830,11 @@
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#0F172A',
+            backgroundColor: '#0E1F33',
             padding: 12,
-            titleFont: { family: 'Manrope', weight: '700', size: 12 },
+            titleFont: { family: 'Montserrat', weight: '700', size: 12 },
             bodyFont: { family: 'JetBrains Mono', size: 12 },
-            borderColor: '#F26522',
+            borderColor: '#2D6CB8',
             borderWidth: 1,
             cornerRadius: 8,
             displayColors: false,
@@ -838,8 +865,8 @@
   function updateLineChart() {
     const range = bucketRange[state.bucket];
     lineChart.data.datasets[0].pointBackgroundColor = lineData.map((_, i) => {
-      if (!range) return '#F26522';
-      return (i >= range[0] && i <= range[1]) ? '#F26522' : '#FCD2B8';
+      if (!range) return '#2D6CB8';
+      return (i >= range[0] && i <= range[1]) ? '#2D6CB8' : '#BDD0E8';
     });
     lineChart.data.datasets[0].pointRadius = lineData.map((_, i) => {
       if (!range) return 3.5;
@@ -880,9 +907,9 @@
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#0F172A',
+            backgroundColor: '#0E1F33',
             padding: 12,
-            titleFont: { family: 'Manrope', weight: '700', size: 12 },
+            titleFont: { family: 'Montserrat', weight: '700', size: 12 },
             bodyFont: { family: 'JetBrains Mono', size: 12 },
             cornerRadius: 8,
             displayColors: false,
@@ -906,7 +933,7 @@
             border: { display: false }
           },
           x: {
-            ticks: { color: '#475569', font: { family: 'Manrope', weight: '600', size: 11 } },
+            ticks: { color: '#475569', font: { family: 'Montserrat', weight: '600', size: 11 } },
             grid: { display: false },
             border: { color: '#E2E8F0' }
           }
